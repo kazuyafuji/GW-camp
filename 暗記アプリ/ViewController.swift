@@ -19,7 +19,7 @@ extension UIColor {
 }
 
 
-class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout  {
+class ViewController: UIViewController, UICollectionViewDelegate {
     
     let dateManager = DateManager()
     let daysPerWeek: Int = 7
@@ -43,7 +43,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         calendarCollectionView.dataSource = self
         calendarCollectionView.backgroundColor = UIColor.white
         
-         headerTitle.text = changeHeaderTitle(date: selectedDate) //追記
+        headerTitle.text = changeHeaderTitle(date: selectedDate) //追記
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,8 +51,39 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         // Dispose of any resources that can be recreated.
     }
     
+    
+    
+    
+    //headerの月を変更
+    func changeHeaderTitle(date: NSDate) -> String {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = "M/yyyy"
+        let selectMonth = formatter.string(from: date as Date)
+        return selectMonth
+    }
+    
+    
+    //①タップ時
+    @IBAction func tappedHeaderPrevBtn(sender: UIButton) {
+        selectedDate = dateManager.prevMonth(date: selectedDate)
+        calendarCollectionView.reloadData()
+        headerTitle.text = changeHeaderTitle(date: selectedDate)
+    }
+    
+    //②タップ時
+    @IBAction func tappedHeaderNextBtn(sender: UIButton) {
+        selectedDate = dateManager.nextMonth(date: selectedDate)
+        calendarCollectionView.reloadData()
+        headerTitle.text = changeHeaderTitle(date: selectedDate)
+    }
+    
+
+}
+
+extension ViewController: UICollectionViewDataSource {
+    
     //1
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
     //2
@@ -87,6 +118,12 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         return cell
     }
     
+}
+
+
+
+extension ViewController: UICollectionViewDelegateFlowLayout {
+    
     //セルのサイズを設定
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let numberOfMargin: CGFloat = 8.0
@@ -106,29 +143,6 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         return cellMargin
     }
     
-    //headerの月を変更
-    func changeHeaderTitle(date: NSDate) -> String {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.dateFormat = "M/yyyy"
-        let selectMonth = formatter.string(from: date as Date)
-        return selectMonth
-    }
-    
-    
-    //①タップ時
-    @IBAction func tappedHeaderPrevBtn(sender: UIButton) {
-        selectedDate = dateManager.prevMonth(date: selectedDate)
-        calendarCollectionView.reloadData()
-        headerTitle.text = changeHeaderTitle(date: selectedDate)
-    }
-    
-    //②タップ時
-    @IBAction func tappedHeaderNextBtn(sender: UIButton) {
-        selectedDate = dateManager.nextMonth(date: selectedDate)
-        calendarCollectionView.reloadData()
-        headerTitle.text = changeHeaderTitle(date: selectedDate)
-    }
-    
-
 }
+
 
