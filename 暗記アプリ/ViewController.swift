@@ -27,14 +27,14 @@ class ViewController: UIViewController, UICollectionViewDelegate {
     var selectedDate = NSDate()
     var today: NSDate!
     let weekArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-
     
-    @IBOutlet var headerPrevBtn: UIButton!
-    @IBOutlet var headerNextBtn: UIButton!
-    @IBOutlet var headerTitle: UILabel!
+    
+    @IBOutlet var headerPrevBtn: UIBarButtonItem!
+    @IBOutlet var headerNextBtn: UIBarButtonItem!
+    @IBOutlet var headerTitle: UINavigationItem!
     @IBOutlet var calendarHeaderView : UIView!
     @IBOutlet var calendarCollectionView: UICollectionView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -43,9 +43,9 @@ class ViewController: UIViewController, UICollectionViewDelegate {
         calendarCollectionView.dataSource = self
         calendarCollectionView.backgroundColor = UIColor.white
         
-        headerTitle.text = changeHeaderTitle(date: selectedDate) //追記
+        headerTitle.title = changeHeaderTitle(date: selectedDate) //追記
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -64,20 +64,20 @@ class ViewController: UIViewController, UICollectionViewDelegate {
     
     
     //①タップ時
-    @IBAction func tappedHeaderPrevBtn(sender: UIButton) {
+    @IBAction func tappedHeaderPrevBtn(sender: UIBarButtonItem) {
         selectedDate = dateManager.prevMonth(date: selectedDate)
         calendarCollectionView.reloadData()
-        headerTitle.text = changeHeaderTitle(date: selectedDate)
+        headerTitle.title = changeHeaderTitle(date: selectedDate)
     }
     
     //②タップ時
-    @IBAction func tappedHeaderNextBtn(sender: UIButton) {
+    @IBAction func tappedHeaderNextBtn(sender: UIBarButtonItem) {
         selectedDate = dateManager.nextMonth(date: selectedDate)
         calendarCollectionView.reloadData()
-        headerTitle.text = changeHeaderTitle(date: selectedDate)
+        headerTitle.title = changeHeaderTitle(date: selectedDate)
     }
     
-
+    
 }
 
 extension ViewController: UICollectionViewDataSource {
@@ -118,6 +118,21 @@ extension ViewController: UICollectionViewDataSource {
         return cell
     }
     
+    // Segue 準備
+    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
+        if (segue.identifier == "toCalendarSchedule") {
+            
+        }
+    }
+    
+    
+    // Cell が選択された場合
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // SubViewController へ遷移するために Segue を呼び出す
+        self.performSegue(withIdentifier: "toCalendarSchedule",sender: nil)
+    }
+
+    
 }
 
 
@@ -144,5 +159,10 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     }
     
 }
+
+
+
+
+
 
 

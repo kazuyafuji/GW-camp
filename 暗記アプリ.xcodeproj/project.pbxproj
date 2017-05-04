@@ -16,6 +16,7 @@
 		C5090D011EB9B197008F28D7 /* ______UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D001EB9B197008F28D7 /* ______UITests.swift */; };
 		C5090D0F1EB9B5DB008F28D7 /* DateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D0E1EB9B5DB008F28D7 /* DateManager.swift */; };
 		C5090D111EB9B628008F28D7 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D101EB9B628008F28D7 /* CalendarCell.swift */; };
+		C5090D171EBA0D1B008F28D7 /* calendarScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D161EBA0D1B008F28D7 /* calendarScheduleViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		C5090D021EB9B197008F28D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C5090D0E1EB9B5DB008F28D7 /* DateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateManager.swift; sourceTree = "<group>"; };
 		C5090D101EB9B628008F28D7 /* CalendarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
+		C5090D161EBA0D1B008F28D7 /* calendarScheduleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = calendarScheduleViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				C5090CE71EB9B197008F28D7 /* Assets.xcassets */,
 				C5090CE91EB9B197008F28D7 /* LaunchScreen.storyboard */,
 				C5090CEC1EB9B197008F28D7 /* Info.plist */,
+				C5090D161EBA0D1B008F28D7 /* calendarScheduleViewController.swift */,
 			);
 			path = "暗記アプリ";
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5090D171EBA0D1B008F28D7 /* calendarScheduleViewController.swift in Sources */,
 				C5090CE31EB9B196008F28D7 /* ViewController.swift in Sources */,
 				C5090D0F1EB9B5DB008F28D7 /* DateManager.swift in Sources */,
 				C5090CE11EB9B196008F28D7 /* AppDelegate.swift in Sources */,

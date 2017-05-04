@@ -62,6 +62,8 @@ class DateManager: NSObject {
         }
     }
     
+    
+    
     // ⑵表記の変更
     func conversionDateFormat(indexPath: NSIndexPath) -> String {
         dateForCellAtIndexPath(numberOfItems: numberOfItems)
