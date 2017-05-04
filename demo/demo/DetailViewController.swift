@@ -1,5 +1,5 @@
 //
-//  preViewController.swift
+//  DetailViewController.swift
 //  demo
 //
 //  Created by 藤原和矢 on 2017/05/04.
@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import RealmSwift
 
-class preViewController: UIViewController, UITextFieldDelegate {
+class DetailViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var dueDatePicker: UIDatePicker!
     @IBOutlet var titleTextField: UITextField!
@@ -21,8 +22,8 @@ class preViewController: UIViewController, UITextFieldDelegate {
         titleTextField.delegate = self
         descriptionTextField.delegate = self
         if let todo = self.todo {
-            titleTextField.text = todo .title
-            descriptionTextField.text = todo.detailDiscripition
+            titleTextField.text = todo.title
+            descriptionTextField.text = todo.detailDescription
             dueDatePicker.date = todo.dueDate as Date
         }
 
@@ -30,7 +31,29 @@ class preViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func save() {
+        if let title = titleTextField.text, let detailDescription = descriptionTextField.text {
+            
+            //追加するためのコード
+            let todo = ToDo()
+            todo.id = ToDo.lastId()
+            todo.title = title
+            todo.detailDescription = detailDescription
+            
+            let realm = try! Realm()
+            try! realm.write {
+                
+                realm.add(todo)
+            
+            }
+            
+            print(Realm.Configuration.defaultConfiguration.fileURL?.absoluteString ?? "")
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
+        textField.resignFirstResponder()
+        return true
     }
 
     override func didReceiveMemoryWarning() {

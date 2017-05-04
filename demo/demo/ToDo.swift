@@ -13,13 +13,13 @@ class ToDo: Object {
     
     dynamic var id : Int = 0
     dynamic var title : String = ""
-    dynamic var detailDiscripition: String = ""
+    dynamic var detailDescription: String = ""
     dynamic var createdAt :NSDate = NSDate()
     dynamic var dueDate: NSDate = NSDate()
     
     override static func primaryKey() -> String? {
         
-        return"id"
+        return "id"
     }
     
     static func lastId() -> Int {

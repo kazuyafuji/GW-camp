@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 extension UIColor {
     class func lightBlue() -> UIColor {
@@ -121,7 +122,8 @@ extension ViewController: UICollectionViewDataSource {
     // Segue 準備
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if (segue.identifier == "toCalendarSchedule") {
-            
+            let controller = segue.destination as! CalendarScheduleViewController
+            controller.monthYear = selectedDate
         }
     }
     
@@ -129,6 +131,9 @@ extension ViewController: UICollectionViewDataSource {
     // Cell が選択された場合
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // SubViewController へ遷移するために Segue を呼び出す
+        print(selectedDate)
+        print(indexPath.section)
+        print(indexPath.row)
         self.performSegue(withIdentifier: "toCalendarSchedule",sender: nil)
     }
 

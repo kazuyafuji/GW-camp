@@ -53,9 +53,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.subtitle, reuseIdentifier: "MyTestCell")
-        
-        return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
+        cell?.textLabel?.text = todoes[indexPath.row].title
+        return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -65,7 +65,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toDetail" {
             
-            let controller = segue.destination as! preViewController
+            let controller = segue.destination as! DetailViewController
             if let todo = sender as? ToDo {
                 controller.todo = todo
             }

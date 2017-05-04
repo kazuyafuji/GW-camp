@@ -15,7 +15,7 @@
 		C5090D2F1EBAC435008F28D7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5090D2D1EBAC435008F28D7 /* LaunchScreen.storyboard */; };
 		C5090D3A1EBAC435008F28D7 /* demoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D391EBAC435008F28D7 /* demoTests.swift */; };
 		C5090D451EBAC435008F28D7 /* demoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D441EBAC435008F28D7 /* demoUITests.swift */; };
-		C5090D531EBAC537008F28D7 /* preViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D521EBAC537008F28D7 /* preViewController.swift */; };
+		C5090D531EBAC537008F28D7 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D521EBAC537008F28D7 /* DetailViewController.swift */; };
 		C5090D551EBAD474008F28D7 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D541EBAD474008F28D7 /* ToDo.swift */; };
 		E30A0749C5D4C170D3CAAE33 /* Pods_demoUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD3BB03F7BE6C0C46D87B655 /* Pods_demoUITests.framework */; };
 		E8014B48286064F98BBF9333 /* Pods_demoTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7513DB9F2DFF5C761B50BE1E /* Pods_demoTests.framework */; };
@@ -58,7 +58,7 @@
 		C5090D401EBAC435008F28D7 /* demoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = demoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5090D441EBAC435008F28D7 /* demoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demoUITests.swift; sourceTree = "<group>"; };
 		C5090D461EBAC435008F28D7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C5090D521EBAC537008F28D7 /* preViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = preViewController.swift; sourceTree = "<group>"; };
+		C5090D521EBAC537008F28D7 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		C5090D541EBAD474008F28D7 /* ToDo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
 		EA6072907980D5BD34196D0D /* Pods-demoTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demoTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-demoTests/Pods-demoTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EB77F2F8F60A29F093FE87AB /* Pods-demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-demo/Pods-demo.release.xcconfig"; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 				C5090D2B1EBAC435008F28D7 /* Assets.xcassets */,
 				C5090D2D1EBAC435008F28D7 /* LaunchScreen.storyboard */,
 				C5090D301EBAC435008F28D7 /* Info.plist */,
-				C5090D521EBAC537008F28D7 /* preViewController.swift */,
+				C5090D521EBAC537008F28D7 /* DetailViewController.swift */,
 				C5090D541EBAD474008F28D7 /* ToDo.swift */,
 			);
 			path = demo;
@@ -454,7 +454,7 @@
 			files = (
 				C5090D271EBAC435008F28D7 /* ViewController.swift in Sources */,
 				C5090D251EBAC435008F28D7 /* AppDelegate.swift in Sources */,
-				C5090D531EBAC537008F28D7 /* preViewController.swift in Sources */,
+				C5090D531EBAC537008F28D7 /* DetailViewController.swift in Sources */,
 				C5090D551EBAD474008F28D7 /* ToDo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
