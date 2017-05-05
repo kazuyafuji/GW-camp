@@ -67,12 +67,12 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" title="Title" id="dxV-W3-GhA">
-                        <barButtonItem key="leftBarButtonItem" title="preview" id="bzS-dY-7iw">
+                        <barButtonItem key="leftBarButtonItem" title="前" id="bzS-dY-7iw">
                             <connections>
                                 <action selector="tappedHeaderPrevBtnWithSender:" destination="BYZ-38-t0r" id="Fe6-WU-e1O"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="next" id="sIy-xL-ICH">
+                        <barButtonItem key="rightBarButtonItem" title="次" id="sIy-xL-ICH">
                             <connections>
                                 <action selector="tappedHeaderNextBtnWithSender:" destination="BYZ-38-t0r" id="d88-ds-mF5"/>
                             </connections>
@@ -125,6 +125,7 @@
                     <navigationItem key="navigationItem" title="予定" id="fOk-oS-R9C">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="8xx-tE-hZl">
                             <connections>
+                                <action selector="add" destination="wvu-vL-vi3" id="fZi-WY-Iin"/>
                                 <segue destination="1B9-Yt-Nfv" kind="show" identifier="toDetail" id="MEX-f3-Odx"/>
                             </connections>
                         </barButtonItem>
@@ -185,6 +186,14 @@
                                     <!--2017-05-04 06:00:33 +0000-->
                                 </date>
                             </datePicker>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g83-i0-8vt">
+                                <rect key="frame" x="156" y="542" width="62" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="削除する"/>
+                                <connections>
+                                    <action selector="delete" destination="1B9-Yt-Nfv" eventType="touchUpInside" id="mYT-3k-Evx"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -196,6 +205,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="deleteButton" destination="g83-i0-8vt" id="i5M-X5-t0c"/>
                         <outlet property="dueDatePicker" destination="XBZ-dc-aXg" id="j3J-GF-hER"/>
                         <outlet property="memoTextField" destination="dPW-GT-G8P" id="Aig-Gw-HVY"/>
                         <outlet property="scheduleTextField" destination="AOU-4r-aLe" id="kEh-eR-DTf"/>

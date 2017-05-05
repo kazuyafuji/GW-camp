@@ -17,6 +17,9 @@ class ScheduleDescription: Object {
     dynamic var memo :String = ""
     dynamic var createdAt : NSDate = NSDate()
     dynamic var dueDate: NSDate = NSDate()
+    dynamic var nextDay :NSDate = NSDate()
+    dynamic var nextWeek :NSDate = NSDate()
+    dynamic var nextMonth: NSDate = NSDate()
     
     override static func primaryKey() -> String? {
         return "id"

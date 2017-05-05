@@ -29,6 +29,8 @@ class ViewController: UIViewController, UICollectionViewDelegate {
     var today: NSDate!
     let weekArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     
+    var cellTapped :Bool = false
+    
     
     @IBOutlet var headerPrevBtn: UIBarButtonItem!
     @IBOutlet var headerNextBtn: UIBarButtonItem!
@@ -123,7 +125,10 @@ extension ViewController: UICollectionViewDataSource {
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if (segue.identifier == "toCalendarSchedule") {
             let controller = segue.destination as! CalendarScheduleViewController
-            controller.monthYear = selectedDate
+            let array = sender as! [Int]
+            controller.beginDate = beginningOfDay(with: array[0], month: array[1], day: array[2])
+            controller.endDate = endOfDay(with: array[0], month: array[1], day: array[2])
+            controller.selectedDate = self.selectedDate
         }
     }
     
@@ -132,14 +137,58 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // SubViewController へ遷移するために Segue を呼び出す
         print(selectedDate)
-        print(indexPath.section)
+        print(dateManager.conversionDateFormat(indexPath: indexPath as NSIndexPath))
         print(indexPath.row)
-        self.performSegue(withIdentifier: "toCalendarSchedule",sender: nil)
+        var day = Int()
+        var month = Int()
+        var year = Int()
+        let calendar = NSCalendar.current
+        
+        //日付ごとに記録されている内容を分類する
+        year = calendar.component(.year, from: selectedDate as Date )
+        day = Int(dateManager.conversionDateFormat(indexPath: indexPath as NSIndexPath))!
+        if indexPath.row < 6 && day > 8{
+            month = calendar.component(.month, from: selectedDate as Date) - 1
+        } else if indexPath.row > 27 && day < 8 {
+            month = calendar.component(.month, from: selectedDate as Date) + 1
+        } else {
+            month = calendar.component(.month, from: selectedDate as Date)
+        }
+        
+        print(year)
+        print(month)
+        print(day)
+        print(indexPath.row)
+        
+        cellTapped = true
+        
+        self.performSegue(withIdentifier: "toCalendarSchedule",sender: [year,month,day])
+        
+    }
+    
+    func endOfDay(with year:Int, month :Int, day :Int) -> NSDate {
+        
+        let dateString = "\(year)/\(String(format: "%02d",month))/\(String(format: "%02d",day)) 23:59:59"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        return dateFormatter.date(from: dateString)! as NSDate
+    }
+    
+    func beginningOfDay(with year:Int, month :Int, day :Int) -> NSDate {
+        
+        let dateString = "\(year)/\(String(format: "%02d",month))/\(String(format: "%02d",day)) 00:00:00"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
+        dateFormatter.locale = Locale(identifier: "ja_JP")
+        return dateFormatter.date(from: dateString)! as NSDate
     }
 
     
+    
+    
+    
 }
-
 
 
 extension ViewController: UICollectionViewDelegateFlowLayout {
@@ -162,6 +211,7 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return cellMargin
     }
+    
     
 }
 

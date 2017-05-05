@@ -12,18 +12,56 @@ import RealmSwift
 class CalendarScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var navigationBar : UINavigationBar!
     
-    var monthYear : NSDate = NSDate()
+    var beginDate : NSDate = NSDate()
+    var endDate :NSDate = NSDate()
     
-    var todoes: Results<ScheduleDescription> = {
-        
-        let realm = try! Realm()
-        return realm.objects(ScheduleDescription.self)/*.filter()*/
-    }()
+    var selectedDate: NSDate!
+    
+    
+    var todoes: Results<ScheduleDescription>!
+    var todoes2 : Results<ScheduleDescription>!
+    var todoes3 : Results<ScheduleDescription>!
+    var todoes4 : Results<ScheduleDescription>!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        
+        
+        todoes  = {
+            
+            let realm = try! Realm()
+            let Predicate: NSPredicate = NSPredicate(format: "dueDate <= %@ AND dueDate >= %@" ,                                                     argumentArray: [endDate, beginDate])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes2  = {
+            
+            let realm = try! Realm()
+            let Predicate: NSPredicate = NSPredicate(format: "nextDay <= %@ AND nextDay >= %@" ,                                                     argumentArray: [endDate, beginDate])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes3  = {
+            
+            let realm = try! Realm()
+            let Predicate: NSPredicate = NSPredicate(format: "nextWeek <= %@ AND nextWeek >= %@" ,                                                     argumentArray: [endDate, beginDate])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes4  = {
+            
+            let realm = try! Realm()
+            let Predicate: NSPredicate = NSPredicate(format: "nextMonth <= %@ AND nextMonth >= %@" ,                                                     argumentArray: [endDate, beginDate])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        
+        
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -39,6 +77,17 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         super.viewWillAppear(animated)
         
         tableView.reloadData()
+        
+        self.navigationItem.title = changeNavigationBarTitle(date: selectedDate)
+    }
+    
+    func changeNavigationBarTitle(date: NSDate) -> String {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.dateFormat = "M/dd"
+        let selectMonth = formatter.string(from: date as Date)
+        let selectDay = formatter.string(from: date as Date)
+        return (selectMonth + selectDay)
+        
     }
     
     @IBAction func add() {
@@ -51,12 +100,25 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todoes.count
+        return todoes.count + todoes2.count + todoes3.count + todoes4.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
-        cell?.textLabel?.text = todoes[indexPath.row].schedule
+        if indexPath.row < todoes.count {
+            cell?.textLabel?.text = todoes[indexPath.row].schedule
+            
+        } else if indexPath.row < todoes.count + todoes2.count {
+            cell?.textLabel?.text = todoes2[indexPath.row - todoes.count].schedule
+            
+            
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count {
+            cell?.textLabel?.text = todoes3[indexPath.row - todoes.count - todoes2.count].schedule
+            
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count {
+            cell?.textLabel?.text = todoes4[indexPath.row - todoes.count - todoes2.count - todoes3.count].schedule
+            
+        }
         return cell!
     }
     

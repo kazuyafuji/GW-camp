@@ -11,6 +11,7 @@ import RealmSwift
 
 class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
     
+    @IBOutlet var deleteButton: UIButton!
     @IBOutlet var dueDatePicker: UIDatePicker!
     @IBOutlet var scheduleTextField: UITextField!
     @IBOutlet var memoTextField: UITextField!
@@ -30,6 +31,12 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
             memoTextField.text = scheduledescription.memo
             dueDatePicker.date = scheduledescription.dueDate as Date
         }
+        
+        if scheduledescription == nil {
+            deleteButton.isHidden = true
+        }
+        
+        
     }
     
     
@@ -39,20 +46,73 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
     }
     
     @IBAction func save() {
+        
         if let title = scheduleTextField.text, let detailDescription = memoTextField.text {
             
-            //追加するためのコード
-            let scheduledescription = ScheduleDescription()
-            scheduledescription.id = ScheduleDescription.lastId()
-            scheduledescription.schedule = title
-            scheduledescription.memo = detailDescription
-            
-            let realm = try! Realm()
-            try! realm.write {
+            if let scheduledescription = self.scheduledescription {
                 
-                realm.add(scheduledescription)
+                
+                //復習予定日を追加するためのコード
+                let calendar = Calendar.current
+                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: (dueDatePicker.date as NSDate) as Date)
+                
+                let oneWeekNext = calendar.date(byAdding: .day, value: +7 ,to: (dueDatePicker.date as NSDate) as Date)
+                
+                let oneMonthNext = calendar.date(byAdding: .month,value: +1, to: (dueDatePicker.date as NSDate) as Date)
+                
+                
+                
+                let realm = try! Realm()
+                try! realm.write {
+                    //追加するためのコード
+                    scheduledescription.schedule = title
+                    scheduledescription.memo = detailDescription
+                    scheduledescription.dueDate = dueDatePicker.date as NSDate
+                    scheduledescription.nextDay = oneDayNext! as NSDate
+                    scheduledescription.nextWeek = oneWeekNext! as NSDate
+                    scheduledescription.nextMonth = oneMonthNext! as NSDate
+                    
+
+                    realm.add(scheduledescription, update: true)
+                    
+                }
+                
+                
+                
+            } else {
+                
+                
+                //復習予定日を追加するためのコード
+                let calendar = Calendar.current
+                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: (dueDatePicker.date as NSDate) as Date)
+                
+                let oneWeekNext = calendar.date(byAdding: .day, value: +7 ,to: (dueDatePicker.date as NSDate) as Date)
+                
+                let oneMonthNext = calendar.date(byAdding: .month,value: +1, to: (dueDatePicker.date as NSDate) as Date)
+                
+                
+                //追加するためのコード
+                let scheduledescription = ScheduleDescription()
+                scheduledescription.id = ScheduleDescription.lastId()
+                scheduledescription.schedule = title
+                scheduledescription.memo = detailDescription
+                scheduledescription.dueDate = dueDatePicker.date as NSDate
+                scheduledescription.nextDay = oneDayNext! as NSDate
+                scheduledescription.nextWeek = oneWeekNext! as NSDate
+                scheduledescription.nextMonth = oneMonthNext! as NSDate
+                
+                
+                let realm = try! Realm()
+                try! realm.write {
+                    
+                    realm.add(scheduledescription)
+                    
+                }
+                
+                
                 
             }
+            
             
             print(Realm.Configuration.defaultConfiguration.fileURL?.absoluteString ?? "")
         }
@@ -63,8 +123,18 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
             return true
         }
         
-
         
+        
+        
+    }
+    
+    @IBAction func delete() {
+        if let scheduledescription = scheduledescription {
+            let realm = try! Realm()
+            try! realm.write {
+                realm.delete(scheduledescription)
+            }
+        }
     }
     
     
