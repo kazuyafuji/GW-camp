@@ -17,7 +17,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     var beginDate : NSDate = NSDate()
     var endDate :NSDate = NSDate()
     
-    var selectedDate: NSDate!
+    var SelectedDate: NSDate!
     
     
     var todoes: Results<ScheduleDescription>!
@@ -78,7 +78,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         
         tableView.reloadData()
         
-        self.navigationItem.title = changeNavigationBarTitle(date: selectedDate)
+        self.navigationItem.title = changeNavigationBarTitle(date: SelectedDate)
     }
     
     func changeNavigationBarTitle(date: NSDate) -> String {

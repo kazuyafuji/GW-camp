@@ -128,7 +128,7 @@ extension ViewController: UICollectionViewDataSource {
             let array = sender as! [Int]
             controller.beginDate = beginningOfDay(with: array[0], month: array[1], day: array[2])
             controller.endDate = endOfDay(with: array[0], month: array[1], day: array[2])
-            controller.selectedDate = self.selectedDate
+            controller.SelectedDate = self.selectedDate
         }
     }
     
@@ -183,7 +183,7 @@ extension ViewController: UICollectionViewDataSource {
         dateFormatter.locale = Locale(identifier: "ja_JP")
         return dateFormatter.date(from: dateString)! as NSDate
     }
-
+    
     
     
     
