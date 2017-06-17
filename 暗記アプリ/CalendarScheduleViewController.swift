@@ -12,25 +12,24 @@ import RealmSwift
 class CalendarScheduleViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet var tableView: UITableView!
-    @IBOutlet var navigationBar : UINavigationBar!
     
     var beginDate : NSDate = NSDate()
     var endDate :NSDate = NSDate()
-    
-    var SelectedDate: NSDate!
     
     
     var todoes: Results<ScheduleDescription>!
     var todoes2 : Results<ScheduleDescription>!
     var todoes3 : Results<ScheduleDescription>!
     var todoes4 : Results<ScheduleDescription>!
+    var todoes5 : Results<ScheduleDescription>!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        
+        print(beginDate)
+        print(endDate)
         
         todoes  = {
             
@@ -39,6 +38,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
+        //日付Aをタップした時に　nextDayが日付Aになっているデータをこの中に入れる。
         todoes2  = {
             
             let realm = try! Realm()
@@ -46,6 +46,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
+        //日付aをタップした時に　nextWeekが日付aになっているデータをこの中に入れる
         todoes3  = {
             
             let realm = try! Realm()
@@ -57,6 +58,13 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
             
             let realm = try! Realm()
             let Predicate: NSPredicate = NSPredicate(format: "nextMonth <= %@ AND nextMonth >= %@" ,                                                     argumentArray: [endDate, beginDate])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes5 = {
+            
+            let realm = try! Realm()
+            let Predicate:NSPredicate = NSPredicate(format: "dayBefore <= %@ AND dayBefore >= %@", argumentArray:[endDate, beginDate])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
@@ -78,29 +86,41 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         
         tableView.reloadData()
         
-        self.navigationItem.title = changeNavigationBarTitle(date: SelectedDate)
+        self.navigationItem.title = changeNavigationBarTitle(date: beginDate as Date)
     }
     
-    func changeNavigationBarTitle(date: NSDate) -> String {
+    func changeNavigationBarTitle(date: Date) -> String {
         let formatter: DateFormatter = DateFormatter()
-        formatter.dateFormat = "M/dd"
-        let selectMonth = formatter.string(from: date as Date)
-        let selectDay = formatter.string(from: date as Date)
-        return (selectMonth + selectDay)
+        formatter.dateFormat = "MM/dd"
+        let selectDate = formatter.string(from: date)
+        return (selectDate)
         
     }
     
     @IBAction func add() {
         
-        self.performSegue(withIdentifier: "toDetail", sender: nil)
+        self.performSegue(withIdentifier: "toSelect", sender: nil)
     }
     
+    //tableViewのcellを二つに分けるコード
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
+    
+    //sectionの間の題名をつける
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        var array : [String?] = []
+        if section == 0 {
+            array.insert(String("予定"), at: 0)
+        } else if section == 1 {
+           array.insert(String("やること"), at: 1)
+        }
+        return String(describing: array)
+    }
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todoes.count + todoes2.count + todoes3.count + todoes4.count
+        return todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -118,23 +138,43 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count {
             cell?.textLabel?.text = todoes4[indexPath.row - todoes.count - todoes2.count - todoes3.count].schedule
             
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count {
+            cell?.textLabel?.text = todoes5[indexPath.row - todoes.count - todoes2.count - todoes3.count - todoes4.count].schedule
         }
+        
+        let scheduledescription = ScheduleDescription()
+        let scheduleStatus = ScheduleDescription.ScheduleStatus.self
+        if scheduledescription.status == scheduleStatus.yoshuu {
+            cell?.textLabel?.textColor = UIColor.blue
+        } else if scheduledescription.status == scheduleStatus.hukushuu {
+            cell?.textLabel?.textColor = UIColor.red
+        }
+        
         return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: "toDetail", sender: todoes[indexPath.row])
+        self.performSegue(withIdentifier: "toSelect", sender: todoes[indexPath.row])
     }
+    
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toDetail" {
+        if segue.identifier == "toSelect" {
             
-            let controller = segue.destination as! ScheduleDetailViewController
-            if let todo = sender as? ScheduleDescription {
-                controller.scheduledescription = todo
-            }
+            /* let controller = segue.destination as! ScheduleDetailViewController
+             if let todo = sender as? ScheduleDescription {
+             controller.scheduledescription = todo
+             }*/
+            
+            let controller2 = segue.destination as! selectViewController
+            controller2.sDate = self.beginDate
+            
+            
         }
     }
-    
-    
 }
+
+
+
+

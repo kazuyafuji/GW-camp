@@ -28,6 +28,7 @@ class ViewController: UIViewController, UICollectionViewDelegate {
     var selectedDate = NSDate()
     var today: NSDate!
     let weekArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    let calendar = NSCalendar.current
     
     var cellTapped :Bool = false
     
@@ -66,14 +67,14 @@ class ViewController: UIViewController, UICollectionViewDelegate {
     }
     
     
-    //①タップ時
+    //①タップ時(前の月)
     @IBAction func tappedHeaderPrevBtn(sender: UIBarButtonItem) {
         selectedDate = dateManager.prevMonth(date: selectedDate)
         calendarCollectionView.reloadData()
         headerTitle.title = changeHeaderTitle(date: selectedDate)
     }
     
-    //②タップ時
+    //②タップ時(次の月)
     @IBAction func tappedHeaderNextBtn(sender: UIBarButtonItem) {
         selectedDate = dateManager.nextMonth(date: selectedDate)
         calendarCollectionView.reloadData()
@@ -128,7 +129,9 @@ extension ViewController: UICollectionViewDataSource {
             let array = sender as! [Int]
             controller.beginDate = beginningOfDay(with: array[0], month: array[1], day: array[2])
             controller.endDate = endOfDay(with: array[0], month: array[1], day: array[2])
-            controller.SelectedDate = self.selectedDate
+            
+            
+            
         }
     }
     
@@ -136,7 +139,7 @@ extension ViewController: UICollectionViewDataSource {
     // Cell が選択された場合
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // SubViewController へ遷移するために Segue を呼び出す
-        print(selectedDate)
+        print("selectedDate"+String(describing: selectedDate))
         print(dateManager.conversionDateFormat(indexPath: indexPath as NSIndexPath))
         print(indexPath.row)
         var day = Int()
@@ -168,19 +171,29 @@ extension ViewController: UICollectionViewDataSource {
     
     func endOfDay(with year:Int, month :Int, day :Int) -> NSDate {
         
-        let dateString = "\(year)/\(String(format: "%02d",month))/\(String(format: "%02d",day)) 23:59:59"
         let dateFormatter = DateFormatter()
+        //dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        return dateFormatter.date(from: dateString)! as NSDate
+        let dateString = String(year) + "/" + String(month) + "/" + String(day) + " 08:59:59"
+        
+        let yesterdaydate = dateFormatter.date(from: dateString)!  as NSDate
+        
+        var time = yesterdaydate.timeIntervalSince1970
+        time += 60*60*24
+        
+        let newDate: NSDate = NSDate.init(timeIntervalSince1970: time)
+        print("昨日" + dateFormatter.string(from: yesterdaydate as Date))
+        print("明日" + dateFormatter.string(from: newDate as Date))
+        
+        return newDate
     }
     
     func beginningOfDay(with year:Int, month :Int, day :Int) -> NSDate {
         
-        let dateString = "\(year)/\(String(format: "%02d",month))/\(String(format: "%02d",day)) 00:00:00"
         let dateFormatter = DateFormatter()
+        //dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss"
-        dateFormatter.locale = Locale(identifier: "ja_JP")
+        let dateString = String(year) + "/" + String(month) + "/" + String(day) + " 09:00:00"
         return dateFormatter.date(from: dateString)! as NSDate
     }
     

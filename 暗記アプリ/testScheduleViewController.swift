@@ -1,20 +1,20 @@
 //
-//  ScheduleDetailViewController.swift
+//  testScheduleViewController.swift
 //  暗記アプリ
 //
-//  Created by 藤原和矢 on 2017/05/04.
+//  Created by 藤原和矢 on 2017/05/20.
 //  Copyright © 2017年 藤原和矢. All rights reserved.
 //
 
 import UIKit
 import RealmSwift
 
-class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
+class testScheduleViewController: UIViewController , UITextFieldDelegate {
     
-    var sonoDate1 : NSDate = NSDate()
+    var sonoDate2 : NSDate = NSDate()
     
     @IBOutlet var deleteButton: UIButton!
-    @IBOutlet var scheduleTextField: UITextField!
+    @IBOutlet var testScheduleTextField: UITextField!
     @IBOutlet var memoTextField: UITextField!
     
     var scheduledescription : ScheduleDescription!
@@ -25,12 +25,11 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
         
         // Do any additional setup after loading the view.
         
-        scheduleTextField.delegate = self
+        testScheduleTextField.delegate = self
         memoTextField.delegate = self
         if let scheduledescription = self.scheduledescription {
-            scheduleTextField.text = scheduledescription.schedule
+            testScheduleTextField.text = scheduledescription.schedule
             memoTextField.text = scheduledescription.memo
-            /*dueDatePicker.date = scheduledescription.dueDate as Date*/
         }
         
         if scheduledescription == nil {
@@ -50,18 +49,20 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
     
     @IBAction func save() {
         
-        if let title = scheduleTextField.text, let detailDescription = memoTextField.text {
+        if let title = testScheduleTextField.text, let detailDescription = memoTextField.text {
             
             if let scheduledescription = self.scheduledescription {
                 
                 
-                //復習予定日を追加するためのコード
+                //テスト勉強予定日を追加するためのコード
                 let calendar = Calendar.current
-                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: (sonoDate1 as NSDate) as Date)
+                let oneDayBefore = calendar.date(byAdding: .day, value: -1, to: (sonoDate2 as NSDate)as Date)
                 
-                let oneWeekNext = calendar.date(byAdding: .day, value: +7 ,to: (sonoDate1 as NSDate) as Date)
+                let oneMonthBefore = calendar.date(byAdding: .month,value: -1, to: oneDayBefore!)
                 
-                let oneMonthNext = calendar.date(byAdding: .month,value: +1, to: (sonoDate1 as NSDate) as Date)
+                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: oneMonthBefore!)
+                
+                let threeWeeksBefore = calendar.date(byAdding: .day, value: +7 ,to: oneMonthBefore!)
                 
                 
                 
@@ -70,10 +71,16 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                     //追加するためのコード
                     scheduledescription.schedule = title
                     scheduledescription.memo = detailDescription
-                    scheduledescription.dueDate = sonoDate1 as NSDate
+                    scheduledescription.status = .yoshuu
+                    scheduledescription.dueDate = sonoDate2 as NSDate
+                    //nextMonth　は登録したテスト日の前日の一ヶ月前の日
+                    scheduledescription.nextMonth = oneMonthBefore! as NSDate
+                    //nextDay は登録したテスト日の前日の一ヶ月前の日の次の日
                     scheduledescription.nextDay = oneDayNext! as NSDate
-                    scheduledescription.nextWeek = oneWeekNext! as NSDate
-                    scheduledescription.nextMonth = oneMonthNext! as NSDate
+                    //nextWeek は　登録したテスト日の前日の一ヶ月前の日の次の週　テスト勉強の二週間目
+                    scheduledescription.nextWeek = threeWeeksBefore! as NSDate
+                    //dayBefore　は登録したテスト日の前日
+                    scheduledescription.dayBefore = oneDayBefore! as NSDate
                     
                     
                     realm.add(scheduledescription, update: true)
@@ -85,13 +92,16 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
             } else {
                 
                 
-                //復習予定日を追加するためのコード
+                //テスト勉強予定日を追加するためのコード
                 let calendar = Calendar.current
-                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: (sonoDate1 as NSDate) as Date)
+                let oneDayBefore = calendar.date(byAdding: .day, value: -1, to: (sonoDate2 as NSDate)as Date)
                 
-                let oneWeekNext = calendar.date(byAdding: .day, value: +7 ,to: (sonoDate1 as NSDate) as Date)
+                let oneMonthBefore = calendar.date(byAdding: .month,value: -1, to: oneDayBefore!)
                 
-                let oneMonthNext = calendar.date(byAdding: .month,value: +1, to: (sonoDate1 as NSDate) as Date)
+                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: oneMonthBefore!)
+                
+                let threeWeeksBefore = calendar.date(byAdding: .day, value: +7 ,to: oneMonthBefore!)
+                
                 
                 
                 //追加するためのコード
@@ -99,12 +109,16 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                 scheduledescription.id = ScheduleDescription.lastId()
                 scheduledescription.schedule = title
                 scheduledescription.memo = detailDescription
-                scheduledescription.status = .hukushuu
-                scheduledescription.dueDate = sonoDate1 as NSDate
+                scheduledescription.dueDate = sonoDate2 as NSDate
+                //nextMonth　は登録したテスト日の前日の一ヶ月前の日
+                scheduledescription.nextMonth = oneMonthBefore! as NSDate
+                //nextDay は登録したテスト日の前日の一ヶ月前の日の次の日
                 scheduledescription.nextDay = oneDayNext! as NSDate
-                scheduledescription.nextWeek = oneWeekNext! as NSDate
-                scheduledescription.nextMonth = oneMonthNext! as NSDate
-                
+                //nextWeek は　登録したテスト日の前日の一ヶ月前の日の次の週　テスト勉強開始日の一週間後
+                scheduledescription.nextWeek = threeWeeksBefore! as NSDate
+                //dayBefore　は登録したテスト日の前日
+                scheduledescription.dayBefore = oneDayBefore! as NSDate
+            
                 
                 let realm = try! Realm()
                 try! realm.write {
@@ -133,7 +147,7 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                 title: "OK",
                 style: UIAlertActionStyle.default,
                 handler: {action in
-                    _ = self.performSegue(withIdentifier: "toYotei", sender: nil)
+                   _ = self.performSegue(withIdentifier: "toYotei2", sender: nil)
             }
             )
         )
@@ -150,17 +164,5 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
             }
         }
     }
-    
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }

@@ -12,6 +12,7 @@ import RealmSwift
 
 class ScheduleDescription: Object {
     
+    
     dynamic var id : Int = 0
     dynamic var schedule :String = ""
     dynamic var memo :String = ""
@@ -20,6 +21,13 @@ class ScheduleDescription: Object {
     dynamic var nextDay :NSDate = NSDate()
     dynamic var nextWeek :NSDate = NSDate()
     dynamic var nextMonth: NSDate = NSDate()
+    dynamic var dayBefore: NSDate = NSDate()
+    var status: ScheduleStatus!
+    
+    enum ScheduleStatus {
+        case hukushuu
+        case yoshuu
+    }
     
     override static func primaryKey() -> String? {
         return "id"

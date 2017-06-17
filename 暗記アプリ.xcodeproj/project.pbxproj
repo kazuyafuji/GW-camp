@@ -22,6 +22,8 @@
 		C5090D171EBA0D1B008F28D7 /* CalendarScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D161EBA0D1B008F28D7 /* CalendarScheduleViewController.swift */; };
 		C5090D571EBAF954008F28D7 /* ScheduleDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D561EBAF954008F28D7 /* ScheduleDescription.swift */; };
 		C5090D591EBAFA60008F28D7 /* ScheduleDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5090D581EBAFA60008F28D7 /* ScheduleDetailViewController.swift */; };
+		C5EF8FE71ED07CB000620DF0 /* testScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EF8FE61ED07CB000620DF0 /* testScheduleViewController.swift */; };
+		C5EF8FE91ED07E6900620DF0 /* selectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EF8FE81ED07E6900620DF0 /* selectViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +70,8 @@
 		C5090D161EBA0D1B008F28D7 /* CalendarScheduleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarScheduleViewController.swift; sourceTree = "<group>"; };
 		C5090D561EBAF954008F28D7 /* ScheduleDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleDescription.swift; sourceTree = "<group>"; };
 		C5090D581EBAFA60008F28D7 /* ScheduleDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleDetailViewController.swift; sourceTree = "<group>"; };
+		C5EF8FE61ED07CB000620DF0 /* testScheduleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = testScheduleViewController.swift; sourceTree = "<group>"; };
+		C5EF8FE81ED07E6900620DF0 /* selectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = selectViewController.swift; sourceTree = "<group>"; };
 		CF9BC6937063C701CD4877FC /* Pods-暗記アプリUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-暗記アプリUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-暗記アプリUITests/Pods-暗記アプリUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -155,9 +159,11 @@
 				C5090CE71EB9B197008F28D7 /* Assets.xcassets */,
 				C5090CE91EB9B197008F28D7 /* LaunchScreen.storyboard */,
 				C5090CEC1EB9B197008F28D7 /* Info.plist */,
-				C5090D161EBA0D1B008F28D7 /* CalendarScheduleViewController.swift */,
 				C5090D561EBAF954008F28D7 /* ScheduleDescription.swift */,
+				C5090D161EBA0D1B008F28D7 /* CalendarScheduleViewController.swift */,
+				C5EF8FE81ED07E6900620DF0 /* selectViewController.swift */,
 				C5090D581EBAFA60008F28D7 /* ScheduleDetailViewController.swift */,
+				C5EF8FE61ED07CB000620DF0 /* testScheduleViewController.swift */,
 			);
 			path = "暗記アプリ";
 			sourceTree = "<group>";
@@ -463,10 +469,12 @@
 			files = (
 				C5090D171EBA0D1B008F28D7 /* CalendarScheduleViewController.swift in Sources */,
 				C5090CE31EB9B196008F28D7 /* ViewController.swift in Sources */,
+				C5EF8FE91ED07E6900620DF0 /* selectViewController.swift in Sources */,
 				C5090D0F1EB9B5DB008F28D7 /* DateManager.swift in Sources */,
 				C5090D571EBAF954008F28D7 /* ScheduleDescription.swift in Sources */,
 				C5090CE11EB9B196008F28D7 /* AppDelegate.swift in Sources */,
 				C5090D111EB9B628008F28D7 /* CalendarCell.swift in Sources */,
+				C5EF8FE71ED07CB000620DF0 /* testScheduleViewController.swift in Sources */,
 				C5090D591EBAFA60008F28D7 /* ScheduleDetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
