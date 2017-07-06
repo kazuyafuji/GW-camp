@@ -34,11 +34,15 @@ class selectViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
         if (segue.identifier == "toDetail") {
+            //復習
             let controller = segue.destination as! ScheduleDetailViewController
+            controller.scheduleStatus = ScheduleDescription.ScheduleStatus.hukushuu
             controller.sonoDate1 = self.sDate
         } else if (segue.identifier == "toDetail2") {
-            let controller = segue.destination as! testScheduleViewController
-            controller.sonoDate2 = self.sDate
+            //予習
+            let controller = segue.destination as! ScheduleDetailViewController
+            controller.scheduleStatus = ScheduleDescription.ScheduleStatus.yoshuu
+            controller.sonoDate1 = self.sDate
         }
     }
     

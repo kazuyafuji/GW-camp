@@ -13,11 +13,15 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
     
     var sonoDate1 : NSDate = NSDate()
     
+    
+    
     @IBOutlet var deleteButton: UIButton!
     @IBOutlet var scheduleTextField: UITextField!
     @IBOutlet var memoTextField: UITextField!
     
+    
     var scheduledescription : ScheduleDescription!
+    var scheduleStatus : ScheduleDescription.ScheduleStatus!
     
     
     override func viewDidLoad() {
@@ -67,6 +71,7 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                 
                 let realm = try! Realm()
                 try! realm.write {
+                    print(scheduleStatus)
                     //追加するためのコード
                     scheduledescription.schedule = title
                     scheduledescription.memo = detailDescription
@@ -74,6 +79,7 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                     scheduledescription.nextDay = oneDayNext! as NSDate
                     scheduledescription.nextWeek = oneWeekNext! as NSDate
                     scheduledescription.nextMonth = oneMonthNext! as NSDate
+                    scheduledescription.status = scheduleStatus
                     
                     
                     realm.add(scheduledescription, update: true)
@@ -99,12 +105,12 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                 scheduledescription.id = ScheduleDescription.lastId()
                 scheduledescription.schedule = title
                 scheduledescription.memo = detailDescription
-                scheduledescription.status = .hukushuu
+                scheduledescription.status = scheduleStatus
                 scheduledescription.dueDate = sonoDate1 as NSDate
                 scheduledescription.nextDay = oneDayNext! as NSDate
                 scheduledescription.nextWeek = oneWeekNext! as NSDate
                 scheduledescription.nextMonth = oneMonthNext! as NSDate
-                
+                print(scheduledescription.status)
                 
                 let realm = try! Realm()
                 try! realm.write {
@@ -133,7 +139,8 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                 title: "OK",
                 style: UIAlertActionStyle.default,
                 handler: {action in
-                    _ = self.performSegue(withIdentifier: "toYotei", sender: nil)
+                    
+                    self.navigationController?.popToViewController(self.navigationController!.viewControllers[1], animated: true)
             }
             )
         )
@@ -150,6 +157,8 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
             }
         }
     }
+    
+    
     
     
     

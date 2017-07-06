@@ -94,7 +94,7 @@
         <!--予定-->
         <scene sceneID="iZg-Cv-sMw">
             <objects>
-                <viewController id="wvu-vL-vi3" customClass="CalendarScheduleViewController" customModule="暗記アフ_リ" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CalendarSchedule" id="wvu-vL-vi3" customClass="CalendarScheduleViewController" customModule="暗記アフ_リ" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fiw-WY-Yqa"/>
                         <viewControllerLayoutGuide type="bottom" id="Rsk-dd-OCy"/>
@@ -108,11 +108,11 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" id="Udw-eY-ml8">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" id="Udw-eY-ml8">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Udw-eY-ml8" id="p7Y-MQ-utR">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -136,6 +136,7 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="tableView" destination="Jy5-oG-DFd" id="yU0-zi-qbT"/>
+                        <segue destination="1B9-Yt-Nfv" kind="push" identifier="directDetail" id="erH-9d-AJH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DlB-L1-gf9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -185,7 +186,7 @@
                                     <color key="titleColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="OTG-gk-ljh" kind="show" identifier="toDetail2" id="xbc-oS-hDn"/>
+                                    <segue destination="1B9-Yt-Nfv" kind="push" identifier="toDetail2" id="C78-un-muc"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -199,7 +200,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pVs-eu-gl0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1711" y="139"/>
+            <point key="canvasLocation" x="1815" y="519"/>
         </scene>
         <!--編集-->
         <scene sceneID="R5U-Cs-1Xk">
@@ -263,84 +264,14 @@
                         <outlet property="deleteButton" destination="g83-i0-8vt" id="i5M-X5-t0c"/>
                         <outlet property="memoTextField" destination="dPW-GT-G8P" id="Aig-Gw-HVY"/>
                         <outlet property="scheduleTextField" destination="AOU-4r-aLe" id="kEh-eR-DTf"/>
-                        <segue destination="wvu-vL-vi3" kind="show" identifier="toYotei" id="hx7-9F-g7T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Epd-MX-ekh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2642" y="50"/>
-        </scene>
-        <!--編集-->
-        <scene sceneID="L65-ry-May">
-            <objects>
-                <viewController id="OTG-gk-ljh" customClass="testScheduleViewController" customModule="暗記アフ_リ" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="3kA-6n-m7A"/>
-                        <viewControllerLayoutGuide type="bottom" id="UOG-zX-eD7"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Ua0-bk-KXT">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JFv-Vj-tB6">
-                                <rect key="frame" x="16" y="111" width="343" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eCh-7b-k3n">
-                                <rect key="frame" x="16" y="206" width="343" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="テスト予定" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5CK-rS-yph">
-                                <rect key="frame" x="16" y="82" width="87" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="メモ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dvm-Ru-7Oa">
-                                <rect key="frame" x="16" y="177" width="35" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3gG-O6-tit">
-                                <rect key="frame" x="156" y="542" width="62" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="削除する"/>
-                                <connections>
-                                    <action selector="delete" destination="OTG-gk-ljh" eventType="touchUpInside" id="LxQ-8a-1Mb"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="編集" id="B9F-ip-86L">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="nxf-Fp-uKC">
-                            <connections>
-                                <action selector="save" destination="OTG-gk-ljh" id="XDE-8Z-KOf"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="deleteButton" destination="3gG-O6-tit" id="Rup-Bi-Mdr"/>
-                        <outlet property="memoTextField" destination="eCh-7b-k3n" id="Onq-Dp-Ihj"/>
-                        <outlet property="testScheduleTextField" destination="JFv-Vj-tB6" id="1BR-a6-R3I"/>
-                        <segue destination="wvu-vL-vi3" kind="show" identifier="toYotei2" id="Hgn-v5-den"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Azh-pv-m5q" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2641" y="854"/>
+            <point key="canvasLocation" x="2831" y="403"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Hgn-v5-den"/>
+        <segue reference="C78-un-muc"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -147,7 +147,7 @@ class testScheduleViewController: UIViewController , UITextFieldDelegate {
                 title: "OK",
                 style: UIAlertActionStyle.default,
                 handler: {action in
-                   _ = self.performSegue(withIdentifier: "toYotei2", sender: nil)
+                    self.navigationController?.popToViewController(self.navigationController!.viewControllers[1], animated: true)
             }
             )
         )

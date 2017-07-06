@@ -16,12 +16,13 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     var beginDate : NSDate = NSDate()
     var endDate :NSDate = NSDate()
     
-    
     var todoes: Results<ScheduleDescription>!
     var todoes2 : Results<ScheduleDescription>!
     var todoes3 : Results<ScheduleDescription>!
     var todoes4 : Results<ScheduleDescription>!
     var todoes5 : Results<ScheduleDescription>!
+    
+    var selecttodo : ScheduleDescription!
     
     
     override func viewDidLoad() {
@@ -85,9 +86,13 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         super.viewWillAppear(animated)
         
         tableView.reloadData()
-        
+       
         self.navigationItem.title = changeNavigationBarTitle(date: beginDate as Date)
+        
+        tableView.sectionHeaderHeight = 40
+        
     }
+    
     
     func changeNavigationBarTitle(date: Date) -> String {
         let formatter: DateFormatter = DateFormatter()
@@ -96,6 +101,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         return (selectDate)
         
     }
+    
     
     @IBAction func add() {
         
@@ -107,15 +113,17 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         return 2
     }
     
+
+    
     //sectionの間の題名をつける
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        var array : [String?] = []
         if section == 0 {
-            array.insert(String("予定"), at: 0)
+            return "予定"
         } else if section == 1 {
-           array.insert(String("やること"), at: 1)
+            return "やること"
+        } else {
+            return ""
         }
-        return String(describing: array)
     }
     
     
@@ -125,28 +133,20 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
-        if indexPath.row < todoes.count {
-            cell?.textLabel?.text = todoes[indexPath.row].schedule
-            
-        } else if indexPath.row < todoes.count + todoes2.count {
-            cell?.textLabel?.text = todoes2[indexPath.row - todoes.count].schedule
-            
-            
-        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count {
-            cell?.textLabel?.text = todoes3[indexPath.row - todoes.count - todoes2.count].schedule
-            
-        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count {
-            cell?.textLabel?.text = todoes4[indexPath.row - todoes.count - todoes2.count - todoes3.count].schedule
-            
-        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count {
-            cell?.textLabel?.text = todoes5[indexPath.row - todoes.count - todoes2.count - todoes3.count - todoes4.count].schedule
+        let scheduledescription = scheduleFrom(indexPath: indexPath)
+        
+        
+        if indexPath.section == 0 {
+            //予定のとき
+            cell?.textLabel?.text = scheduledescription.schedule
+        } else if indexPath.section == 1 {
+            //やることのとき
+            cell?.textLabel?.text = scheduledescription.memo
         }
         
-        let scheduledescription = ScheduleDescription()
-        let scheduleStatus = ScheduleDescription.ScheduleStatus.self
-        if scheduledescription.status == scheduleStatus.yoshuu {
+                if scheduledescription.status == ScheduleDescription.ScheduleStatus.yoshuu {
             cell?.textLabel?.textColor = UIColor.blue
-        } else if scheduledescription.status == scheduleStatus.hukushuu {
+        } else if scheduledescription.status == ScheduleDescription.ScheduleStatus.hukushuu {
             cell?.textLabel?.textColor = UIColor.red
         }
         
@@ -154,23 +154,46 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.performSegue(withIdentifier: "toSelect", sender: todoes[indexPath.row])
+     
+        selecttodo = scheduleFrom(indexPath: indexPath)
+        self.performSegue(withIdentifier: "directDetail", sender: todoes[indexPath.row])
+
     }
     
+    func scheduleFrom(indexPath : IndexPath) -> ScheduleDescription {
+        if indexPath.row < todoes.count {
+            return todoes[indexPath.row]
+            
+        } else if indexPath.row < todoes.count + todoes2.count {
+            return todoes2[indexPath.row - todoes.count]
+            
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count {
+            return todoes3[indexPath.row - todoes.count - todoes2.count]
+            
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count {
+            return todoes4[indexPath.row - todoes.count - todoes2.count - todoes3.count]
+            
+        } else  {
+            return todoes5[indexPath.row - todoes.count - todoes2.count - todoes3.count - todoes4.count]
+        }
+        
+    }
     
-    
+  
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toSelect" {
-            
-            /* let controller = segue.destination as! ScheduleDetailViewController
-             if let todo = sender as? ScheduleDescription {
-             controller.scheduledescription = todo
-             }*/
             
             let controller2 = segue.destination as! selectViewController
             controller2.sDate = self.beginDate
             
             
+        } else if segue.identifier == "directDetail" {
+            let controllerduedate = segue.destination as! ScheduleDetailViewController
+            
+            let scheduledescription = ScheduleDescription()
+           
+            controllerduedate.scheduledescription = scheduledescription
+          
         }
     }
 }
