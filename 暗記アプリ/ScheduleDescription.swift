@@ -22,13 +22,24 @@ class ScheduleDescription: Object {
     dynamic var nextWeek :NSDate = NSDate()
     dynamic var nextMonth: NSDate = NSDate()
     dynamic var dayBefore: NSDate = NSDate()
-    var status: ScheduleStatus!
+    dynamic var statusStr: String!
     
-    enum ScheduleStatus {
-        case hukushuu
-        case yoshuu
+    enum ScheduleStatus : String {
+        case hukushuu = "hukushuu"
+        case yoshuu = "yoshuu"
     }
+
     
+    /// typeをEnumで扱うためのプロパティ
+    var status:ScheduleStatus {
+        get {
+            return ScheduleStatus(rawValue: statusStr)!
+        }
+        set {
+            statusStr = newValue.rawValue
+        }
+    }
+
     override static func primaryKey() -> String? {
         return "id"
     }

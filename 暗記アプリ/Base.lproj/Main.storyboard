@@ -91,10 +91,10 @@
             </objects>
             <point key="canvasLocation" x="151" y="139"/>
         </scene>
-        <!--予定-->
+        <!--CalendarScheduleViewController-->
         <scene sceneID="iZg-Cv-sMw">
             <objects>
-                <viewController storyboardIdentifier="CalendarSchedule" id="wvu-vL-vi3" customClass="CalendarScheduleViewController" customModule="暗記アフ_リ" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CalendarSchedule" title="CalendarScheduleViewController" id="wvu-vL-vi3" customClass="CalendarScheduleViewController" customModule="暗記アフ_リ" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fiw-WY-Yqa"/>
                         <viewControllerLayoutGuide type="bottom" id="Rsk-dd-OCy"/>
@@ -272,6 +272,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="C78-un-muc"/>
+        <segue reference="erH-9d-AJH"/>
     </inferredMetricsTieBreakers>
 </document>

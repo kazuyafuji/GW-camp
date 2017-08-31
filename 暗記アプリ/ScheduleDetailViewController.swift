@@ -52,12 +52,12 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func save() {
+@IBAction func save() {
         
         if let title = scheduleTextField.text, let detailDescription = memoTextField.text {
             
-            if let scheduledescription = self.scheduledescription {
-                
+            if scheduleStatus == ScheduleDescription.ScheduleStatus.hukushuu {
+               //let scheduledescription = self.scheduledescription
                 
                 //復習予定日を追加するためのコード
                 let calendar = Calendar.current
@@ -73,14 +73,15 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                 try! realm.write {
                     print(scheduleStatus)
                     //追加するためのコード
-                    scheduledescription.schedule = title
+                    scheduledescription = ScheduleDescription()
+                    scheduledescription.schedule = String(title)
                     scheduledescription.memo = detailDescription
                     scheduledescription.dueDate = sonoDate1 as NSDate
                     scheduledescription.nextDay = oneDayNext! as NSDate
                     scheduledescription.nextWeek = oneWeekNext! as NSDate
                     scheduledescription.nextMonth = oneMonthNext! as NSDate
                     scheduledescription.status = scheduleStatus
-                    
+            
                     
                     realm.add(scheduledescription, update: true)
                     
@@ -119,7 +120,87 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                     
                 }
                 
+            }
+            
                 
+                
+        if scheduleStatus == ScheduleDescription.ScheduleStatus.yoshuu {
+                //テスト勉強予定日を追加するためのコード
+                let calendar = Calendar.current
+                let oneDayBefore = calendar.date(byAdding: .day, value: -1, to: (sonoDate1 as NSDate)as Date)
+                
+                let oneMonthBefore = calendar.date(byAdding: .month,value: -1, to: oneDayBefore!)
+                
+                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: oneMonthBefore!)
+                
+                let threeWeeksBefore = calendar.date(byAdding: .day, value: +7 ,to: oneMonthBefore!)
+                
+                
+                
+                let realm = try! Realm()
+                try! realm.write {
+                    //追加するためのコード
+                    scheduledescription.schedule = title
+                    scheduledescription.memo = detailDescription
+                    scheduledescription.status = .yoshuu
+                    scheduledescription.dueDate = sonoDate1 as NSDate
+                    //nextMonth　は登録したテスト日の前日の一ヶ月前の日
+                    scheduledescription.nextMonth = oneMonthBefore! as NSDate
+                    //nextDay は登録したテスト日の前日の一ヶ月前の日の次の日
+                    scheduledescription.nextDay = oneDayNext! as NSDate
+                    //nextWeek は　登録したテスト日の前日の一ヶ月前の日の次の週　テスト勉強の二週間目
+                    scheduledescription.nextWeek = threeWeeksBefore! as NSDate
+                    //dayBefore　は登録したテスト日の前日
+                    scheduledescription.dayBefore = oneDayBefore! as NSDate
+                    
+                    
+                    realm.add(scheduledescription, update: true)
+                    
+                }
+                
+                
+                
+            } else {
+                
+                
+                //テスト勉強予定日を追加するためのコード
+                let calendar = Calendar.current
+                let oneDayBefore = calendar.date(byAdding: .day, value: -1, to: (sonoDate1 as NSDate)as Date)
+                
+                let oneMonthBefore = calendar.date(byAdding: .month,value: -1, to: oneDayBefore!)
+                
+                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: oneMonthBefore!)
+                
+                let threeWeeksBefore = calendar.date(byAdding: .day, value: +7 ,to: oneMonthBefore!)
+                
+                
+                
+                //追加するためのコード
+                let scheduledescription = ScheduleDescription()
+                scheduledescription.id = ScheduleDescription.lastId()
+                scheduledescription.schedule = title
+                scheduledescription.memo = detailDescription
+                scheduledescription.dueDate = sonoDate1 as NSDate
+                //nextMonth　は登録したテスト日の前日の一ヶ月前の日
+                scheduledescription.nextMonth = oneMonthBefore! as NSDate
+                //nextDay は登録したテスト日の前日の一ヶ月前の日の次の日
+                scheduledescription.nextDay = oneDayNext! as NSDate
+                //nextWeek は　登録したテスト日の前日の一ヶ月前の日の次の週　テスト勉強開始日の一週間後
+                scheduledescription.nextWeek = threeWeeksBefore! as NSDate
+                //dayBefore　は登録したテスト日の前日
+                scheduledescription.dayBefore = oneDayBefore! as NSDate
+                
+                
+                let realm = try! Realm()
+                try! realm.write {
+                    
+                    realm.add(scheduledescription)
+                    
+                
+            }
+                
+            
+            
                 
             }
             
@@ -139,8 +220,8 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                 title: "OK",
                 style: UIAlertActionStyle.default,
                 handler: {action in
-                    
-                    self.navigationController?.popToViewController(self.navigationController!.viewControllers[1], animated: true)
+                    self.plus()
+                
             }
             )
         )
@@ -148,6 +229,13 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
         self.present(alert, animated: true, completion: nil)
         
     }
+    
+    func plus() {
+        print(navigationController!.viewControllers.count)
+        self.navigationController?.popToViewController(navigationController!.viewControllers[1], animated: true)
+    }
+    
+    
     
     @IBAction func delete() {
         if let scheduledescription = scheduledescription {

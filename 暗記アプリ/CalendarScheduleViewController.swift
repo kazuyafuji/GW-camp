@@ -32,6 +32,15 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         print(beginDate)
         print(endDate)
         
+        self.loadtodes()
+        
+        
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    func loadtodes() {
         todoes  = {
             
             let realm = try! Realm()
@@ -69,13 +78,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
-        
-        
-        
-        tableView.delegate = self
-        tableView.dataSource = self
     }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -85,8 +88,9 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.loadtodes()
         tableView.reloadData()
-       
+        
         self.navigationItem.title = changeNavigationBarTitle(date: beginDate as Date)
         
         tableView.sectionHeaderHeight = 40
@@ -113,7 +117,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         return 2
     }
     
-
+    
     
     //sectionの間の題名をつける
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -144,20 +148,20 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
             cell?.textLabel?.text = scheduledescription.memo
         }
         
-                if scheduledescription.status == ScheduleDescription.ScheduleStatus.yoshuu {
-            cell?.textLabel?.textColor = UIColor.blue
-        } else if scheduledescription.status == ScheduleDescription.ScheduleStatus.hukushuu {
-            cell?.textLabel?.textColor = UIColor.red
-        }
-        
+//        if scheduledescription.status == ScheduleDescription.ScheduleStatus.yoshuu {
+//            cell?.textLabel?.textColor = UIColor.blue
+//        } else if scheduledescription.status == ScheduleDescription.ScheduleStatus.hukushuu {
+//            cell?.textLabel?.textColor = UIColor.red
+//        }
+//        
         return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-     
+        
         selecttodo = scheduleFrom(indexPath: indexPath)
         self.performSegue(withIdentifier: "directDetail", sender: todoes[indexPath.row])
-
+        
     }
     
     func scheduleFrom(indexPath : IndexPath) -> ScheduleDescription {
@@ -179,7 +183,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         
     }
     
-  
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toSelect" {
             
@@ -191,9 +195,9 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
             let controllerduedate = segue.destination as! ScheduleDetailViewController
             
             let scheduledescription = ScheduleDescription()
-           
+            
             controllerduedate.scheduledescription = scheduledescription
-          
+            
         }
     }
 }
