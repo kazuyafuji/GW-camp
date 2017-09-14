@@ -39,6 +39,7 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
         
         if scheduledescription == nil {
             deleteButton.isHidden = true
+            scheduledescription = ScheduleDescription()
         }
         
         
@@ -52,12 +53,12 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-@IBAction func save() {
+    @IBAction func save() {
         
         if let title = scheduleTextField.text, let detailDescription = memoTextField.text {
             
             if scheduleStatus == ScheduleDescription.ScheduleStatus.hukushuu {
-               //let scheduledescription = self.scheduledescription
+                //let scheduledescription = self.scheduledescription
                 
                 //復習予定日を追加するためのコード
                 let calendar = Calendar.current
@@ -81,7 +82,7 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                     scheduledescription.nextWeek = oneWeekNext! as NSDate
                     scheduledescription.nextMonth = oneMonthNext! as NSDate
                     scheduledescription.status = scheduleStatus
-            
+                    
                     
                     realm.add(scheduledescription, update: true)
                     
@@ -89,124 +90,127 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                 
                 
                 
-            } else {
-                
-                
-                //復習予定日を追加するためのコード
-                let calendar = Calendar.current
-                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: (sonoDate1 as NSDate) as Date)
-                
-                let oneWeekNext = calendar.date(byAdding: .day, value: +7 ,to: (sonoDate1 as NSDate) as Date)
-                
-                let oneMonthNext = calendar.date(byAdding: .month,value: +1, to: (sonoDate1 as NSDate) as Date)
-                
-                
-                //追加するためのコード
-                let scheduledescription = ScheduleDescription()
-                scheduledescription.id = ScheduleDescription.lastId()
-                scheduledescription.schedule = title
-                scheduledescription.memo = detailDescription
-                scheduledescription.status = scheduleStatus
-                scheduledescription.dueDate = sonoDate1 as NSDate
-                scheduledescription.nextDay = oneDayNext! as NSDate
-                scheduledescription.nextWeek = oneWeekNext! as NSDate
-                scheduledescription.nextMonth = oneMonthNext! as NSDate
-                print(scheduledescription.status)
-                
-                let realm = try! Realm()
-                try! realm.write {
-                    
-                    realm.add(scheduledescription)
-                    
-                }
-                
-            }
-            
-                
-                
-        if scheduleStatus == ScheduleDescription.ScheduleStatus.yoshuu {
+            } else if scheduleStatus == ScheduleDescription.ScheduleStatus.yoshuu {
                 //テスト勉強予定日を追加するためのコード
                 let calendar = Calendar.current
                 let oneDayBefore = calendar.date(byAdding: .day, value: -1, to: (sonoDate1 as NSDate)as Date)
                 
                 let oneMonthBefore = calendar.date(byAdding: .month,value: -1, to: oneDayBefore!)
                 
-                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: oneMonthBefore!)
+                let oneMonthBeforeDayNext = calendar.date(byAdding: .month, value: -1, to: sonoDate1 as NSDate as Date)
                 
-                let threeWeeksBefore = calendar.date(byAdding: .day, value: +7 ,to: oneMonthBefore!)
+                let oneMonthBeforeWeekNext = calendar.date(byAdding: .day, value: +7 ,to: oneMonthBefore!)
                 
                 
                 
                 let realm = try! Realm()
                 try! realm.write {
+                    print(scheduleStatus)
                     //追加するためのコード
                     scheduledescription.schedule = title
                     scheduledescription.memo = detailDescription
                     scheduledescription.status = .yoshuu
                     scheduledescription.dueDate = sonoDate1 as NSDate
-                    //nextMonth　は登録したテスト日の前日の一ヶ月前の日
-                    scheduledescription.nextMonth = oneMonthBefore! as NSDate
-                    //nextDay は登録したテスト日の前日の一ヶ月前の日の次の日
-                    scheduledescription.nextDay = oneDayNext! as NSDate
-                    //nextWeek は　登録したテスト日の前日の一ヶ月前の日の次の週　テスト勉強の二週間目
-                    scheduledescription.nextWeek = threeWeeksBefore! as NSDate
-                    //dayBefore　は登録したテスト日の前日
+                    scheduledescription.monthBefore = oneMonthBefore! as NSDate
+                    scheduledescription.monthBeforeDayNext = oneMonthBeforeDayNext! as NSDate
+                    scheduledescription.monthBeforeWeekNext = oneMonthBeforeWeekNext! as NSDate
                     scheduledescription.dayBefore = oneDayBefore! as NSDate
+                    scheduledescription.status = scheduleStatus
                     
                     
                     realm.add(scheduledescription, update: true)
                     
                 }
                 
-                
-                
-            } else {
-                
-                
-                //テスト勉強予定日を追加するためのコード
-                let calendar = Calendar.current
-                let oneDayBefore = calendar.date(byAdding: .day, value: -1, to: (sonoDate1 as NSDate)as Date)
-                
-                let oneMonthBefore = calendar.date(byAdding: .month,value: -1, to: oneDayBefore!)
-                
-                let oneDayNext = calendar.date(byAdding: .day, value: +1, to: oneMonthBefore!)
-                
-                let threeWeeksBefore = calendar.date(byAdding: .day, value: +7 ,to: oneMonthBefore!)
-                
-                
-                
-                //追加するためのコード
-                let scheduledescription = ScheduleDescription()
-                scheduledescription.id = ScheduleDescription.lastId()
-                scheduledescription.schedule = title
-                scheduledescription.memo = detailDescription
-                scheduledescription.dueDate = sonoDate1 as NSDate
-                //nextMonth　は登録したテスト日の前日の一ヶ月前の日
-                scheduledescription.nextMonth = oneMonthBefore! as NSDate
-                //nextDay は登録したテスト日の前日の一ヶ月前の日の次の日
-                scheduledescription.nextDay = oneDayNext! as NSDate
-                //nextWeek は　登録したテスト日の前日の一ヶ月前の日の次の週　テスト勉強開始日の一週間後
-                scheduledescription.nextWeek = threeWeeksBefore! as NSDate
-                //dayBefore　は登録したテスト日の前日
-                scheduledescription.dayBefore = oneDayBefore! as NSDate
-                
-                
-                let realm = try! Realm()
-                try! realm.write {
-                    
-                    realm.add(scheduledescription)
-                    
-                
             }
-                
-            
-            
-                
-            }
-            
-            
-            print(Realm.Configuration.defaultConfiguration.fileURL?.absoluteString ?? "")
         }
+        
+        
+        /*
+         //復習予定日を追加するためのコード
+         let calendar = Calendar.current
+         let oneDayNext = calendar.date(byAdding: .day, value: +1, to: (sonoDate1 as NSDate) as Date)
+         
+         let oneWeekNext = calendar.date(byAdding: .day, value: +7 ,to: (sonoDate1 as NSDate) as Date)
+         
+         let oneMonthNext = calendar.date(byAdding: .month,value: +1, to: (sonoDate1 as NSDate) as Date)
+         
+         
+         //追加するためのコード
+         let scheduledescription = ScheduleDescription()
+         scheduledescription.id = ScheduleDescription.lastId()
+         scheduledescription.schedule = title
+         scheduledescription.memo = detailDescription
+         scheduledescription.status = scheduleStatus
+         scheduledescription.dueDate = sonoDate1 as NSDate
+         scheduledescription.nextDay = oneDayNext! as NSDate
+         scheduledescription.nextWeek = oneWeekNext! as NSDate
+         scheduledescription.nextMonth = oneMonthNext! as NSDate
+         print(scheduledescription.status)
+         
+         let realm = try! Realm()
+         try! realm.write {
+         
+         realm.add(scheduledescription)
+         
+         }
+         */
+        
+        
+        
+        
+        
+        /*
+         
+         } else {
+         
+         
+         //テスト勉強予定日を追加するためのコード
+         let calendar = Calendar.current
+         let oneDayBefore = calendar.date(byAdding: .day, value: -1, to: (sonoDate1 as NSDate)as Date)
+         
+         let oneMonthBefore = calendar.date(byAdding: .month,value: -1, to: oneDayBefore!)
+         
+         let oneDayNext = calendar.date(byAdding: .day, value: +1, to: oneMonthBefore!)
+         
+         let threeWeeksBefore = calendar.date(byAdding: .day, value: +7 ,to: oneMonthBefore!)
+         
+         
+         
+         //追加するためのコード
+         let scheduledescription = ScheduleDescription()
+         scheduledescription.id = ScheduleDescription.lastId()
+         scheduledescription.schedule = title
+         scheduledescription.memo = detailDescription
+         scheduledescription.dueDate = sonoDate1 as NSDate
+         //nextMonth　は登録したテスト日の前日の一ヶ月前の日
+         scheduledescription.nextMonth = oneMonthBefore! as NSDate
+         //nextDay は登録したテスト日の前日の一ヶ月前の日の次の日
+         scheduledescription.nextDay = oneDayNext! as NSDate
+         //nextWeek は　登録したテスト日の前日の一ヶ月前の日の次の週　テスト勉強開始日の一週間後
+         scheduledescription.nextWeek = threeWeeksBefore! as NSDate
+         //dayBefore　は登録したテスト日の前日
+         scheduledescription.dayBefore = oneDayBefore! as NSDate
+         
+         
+         let realm = try! Realm()
+         try! realm.write {
+         
+         realm.add(scheduledescription)
+         
+         
+         }
+         
+         
+         
+         
+         }
+         
+         
+         print(Realm.Configuration.defaultConfiguration.fileURL?.absoluteString ?? "")
+         }
+         
+         */
         
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             
@@ -221,7 +225,7 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                 style: UIAlertActionStyle.default,
                 handler: {action in
                     self.plus()
-                
+                    
             }
             )
         )
@@ -244,7 +248,10 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                 realm.delete(scheduledescription)
             }
         }
+        
     }
+        
+    
     
     
     

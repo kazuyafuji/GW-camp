@@ -22,6 +22,9 @@ class ScheduleDescription: Object {
     dynamic var nextWeek :NSDate = NSDate()
     dynamic var nextMonth: NSDate = NSDate()
     dynamic var dayBefore: NSDate = NSDate()
+    dynamic var monthBefore :NSDate = NSDate()
+    dynamic var monthBeforeDayNext :NSDate = NSDate()
+    dynamic var monthBeforeWeekNext :NSDate = NSDate()
     dynamic var statusStr: String!
     
     enum ScheduleStatus : String {
@@ -46,6 +49,7 @@ class ScheduleDescription: Object {
     
     static func lastId() -> Int {
         let realm = try! Realm()
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
         if let scheduledescription = realm.objects(ScheduleDescription.self).sorted(byKeyPath: "id", ascending: false).first{
             return scheduledescription.id + 1
             
@@ -56,3 +60,4 @@ class ScheduleDescription: Object {
     }
 
 }
+

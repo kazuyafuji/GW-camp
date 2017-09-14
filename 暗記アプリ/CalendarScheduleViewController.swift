@@ -21,9 +21,11 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     var todoes3 : Results<ScheduleDescription>!
     var todoes4 : Results<ScheduleDescription>!
     var todoes5 : Results<ScheduleDescription>!
+    var todoes6 : Results<ScheduleDescription>!
+    var todoes7 : Results<ScheduleDescription>!
+    var todoes8 : Results<ScheduleDescription>!
     
     var selecttodo : ScheduleDescription!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +54,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         todoes2  = {
             
             let realm = try! Realm()
-            let Predicate: NSPredicate = NSPredicate(format: "nextDay <= %@ AND nextDay >= %@" ,                                                     argumentArray: [endDate, beginDate])
+            let Predicate: NSPredicate = NSPredicate(format: "nextDay <= %@ AND nextDay >= %@ AND statusStr == hukushuu" ,                                                     argumentArray: [endDate, beginDate]) //こんな感じで書く
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
@@ -60,23 +62,46 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         todoes3  = {
             
             let realm = try! Realm()
-            let Predicate: NSPredicate = NSPredicate(format: "nextWeek <= %@ AND nextWeek >= %@" ,                                                     argumentArray: [endDate, beginDate])
+            let Predicate: NSPredicate = NSPredicate(format: "nextWeek <= %@ AND nextWeek >= %@ AND ScheduleDescription.ScheduleStatus.hukushuu" ,                                                     argumentArray: [endDate, beginDate])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes4  = {
             
             let realm = try! Realm()
-            let Predicate: NSPredicate = NSPredicate(format: "nextMonth <= %@ AND nextMonth >= %@" ,                                                     argumentArray: [endDate, beginDate])
+            let Predicate: NSPredicate = NSPredicate(format: "nextMonth <= %@ AND nextMonth >= %@ AND ScheduleDescription.ScheduleStatus.hukushuu" ,                                                     argumentArray: [endDate, beginDate])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes5 = {
             
             let realm = try! Realm()
-            let Predicate:NSPredicate = NSPredicate(format: "dayBefore <= %@ AND dayBefore >= %@", argumentArray:[endDate, beginDate])
+            let Predicate:NSPredicate = NSPredicate(format: "dayBefore <= %@ AND dayBefore >= %@ AND ScheduleDescription.ScheduleStatus.yoshuu", argumentArray:[endDate, beginDate])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
+        
+        todoes6 = {
+            
+            let realm = try! Realm()
+            let Predicate:NSPredicate = NSPredicate(format: "monthBefore <= %@ AND monthBefore >= %@ AND ScheduleDescription.ScheduleStatus.yoshuu", argumentArray:[endDate, beginDate])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes7 = {
+            
+            let realm = try! Realm()
+            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeDayNext <= %@ AND monthBeforeDayNext >= %@ AND ScheduleDescription.ScheduleStatus.yoshuu", argumentArray:[endDate, beginDate])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes8 = {
+            
+            let realm = try! Realm()
+            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeWeekNext <= %@ AND monthBeforeWeekNext >= %@ AND ScheduleDescription.ScheduleStatus.yoshuu", argumentArray:[endDate, beginDate])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        
         
     }
     
@@ -132,7 +157,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count
+        return todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count + todoes6.count + todoes7.count + todoes8.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -148,12 +173,13 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
             cell?.textLabel?.text = scheduledescription.memo
         }
         
-//        if scheduledescription.status == ScheduleDescription.ScheduleStatus.yoshuu {
-//            cell?.textLabel?.textColor = UIColor.blue
-//        } else if scheduledescription.status == ScheduleDescription.ScheduleStatus.hukushuu {
-//            cell?.textLabel?.textColor = UIColor.red
-//        }
-//        
+        
+        if scheduledescription.status == ScheduleDescription.ScheduleStatus.yoshuu {
+            cell?.textLabel?.textColor = UIColor.blue
+        } else if scheduledescription.status == ScheduleDescription.ScheduleStatus.hukushuu {
+            cell?.textLabel?.textColor = UIColor.red
+        }
+        
         return cell!
     }
     
@@ -177,9 +203,17 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count {
             return todoes4[indexPath.row - todoes.count - todoes2.count - todoes3.count]
             
-        } else  {
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count {
             return todoes5[indexPath.row - todoes.count - todoes2.count - todoes3.count - todoes4.count]
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count + todoes6.count {
+            return todoes6[indexPath.row - todoes.count - todoes2.count - todoes3.count - todoes4.count - todoes5.count]
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count + todoes6.count + todoes7.count {
+            return todoes7[indexPath.row - todoes.count - todoes2.count - todoes3.count - todoes4.count - todoes5.count - todoes6.count]
+        } else  {
+            return todoes8[indexPath.row - todoes.count - todoes2.count - todoes3.count - todoes4.count - todoes5.count - todoes6.count - todoes7.count]
         }
+        
+        
         
     }
     

@@ -1,0 +1,13 @@
+{
+  'version': 0,
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': '/Users/kazuya0131/Desktop/Xcode/暗記アプリ/build/Debug-iphoneos/RealmSwift/RealmSwift.framework/Modules'
+    'contents': [{
+      'type': 'file',
+      'name': 'module.modulemap',
+      'external-contents': '/Users/kazuya0131/Desktop/Xcode/暗記アプリ/build/Pods.build/Debug-iphoneos/RealmSwift.build/unextended-module.modulemap',
+    }]
+  }]
+}
