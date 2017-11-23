@@ -53,6 +53,11 @@ class ViewController: UIViewController, UICollectionViewDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        //barbuttonitemのフォントを変えたい
+        if let font = UIFont(name: "HiraginoSans-W6", size: 15) {
+            headerNextBtn.setTitleTextAttributes([NSFontAttributeName:font], for: .normal)
+            headerPrevBtn.setTitleTextAttributes([NSFontAttributeName:font], for: .normal)
+        }
     }
     
     

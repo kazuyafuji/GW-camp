@@ -19,6 +19,10 @@ class selectViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        cancelButton.layer.borderColor = UIColor.white.cgColor
+        cancelButton.layer.borderWidth = 1.0
+        cancelButton.layer.cornerRadius = 15
+
         // Do any additional setup after loading the view.
     }
     

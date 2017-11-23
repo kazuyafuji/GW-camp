@@ -15,6 +15,8 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     
     var beginDate : NSDate = NSDate()
     var endDate :NSDate = NSDate()
+    var status1:String = ScheduleDescription.ScheduleStatus.hukushuu.rawValue
+    var status2:String = ScheduleDescription.ScheduleStatus.yoshuu.rawValue
     
     var todoes: Results<ScheduleDescription>!
     var todoes2 : Results<ScheduleDescription>!
@@ -26,6 +28,8 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     var todoes8 : Results<ScheduleDescription>!
     
     var selecttodo : ScheduleDescription!
+    
+    var selectedIndexPath = 
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +58,8 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         todoes2  = {
             
             let realm = try! Realm()
-            let Predicate: NSPredicate = NSPredicate(format: "nextDay <= %@ AND nextDay >= %@ AND statusStr == hukushuu" ,                                                     argumentArray: [endDate, beginDate]) //こんな感じで書く
+            let Predicate: NSPredicate = NSPredicate(format: "nextDay <= %@ AND nextDay >= %@ AND statusStr == %@" ,
+                argumentArray: [endDate, beginDate,status1]) 
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
@@ -62,42 +67,42 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         todoes3  = {
             
             let realm = try! Realm()
-            let Predicate: NSPredicate = NSPredicate(format: "nextWeek <= %@ AND nextWeek >= %@ AND ScheduleDescription.ScheduleStatus.hukushuu" ,                                                     argumentArray: [endDate, beginDate])
+            let Predicate: NSPredicate = NSPredicate(format: "nextWeek <= %@ AND nextWeek >= %@ AND statusStr == %@" ,                                                     argumentArray: [endDate, beginDate,status1])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes4  = {
             
             let realm = try! Realm()
-            let Predicate: NSPredicate = NSPredicate(format: "nextMonth <= %@ AND nextMonth >= %@ AND ScheduleDescription.ScheduleStatus.hukushuu" ,                                                     argumentArray: [endDate, beginDate])
+            let Predicate: NSPredicate = NSPredicate(format: "nextMonth <= %@ AND nextMonth >= %@ AND statusStr == %@" ,                                                     argumentArray: [endDate, beginDate,status1])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes5 = {
             
             let realm = try! Realm()
-            let Predicate:NSPredicate = NSPredicate(format: "dayBefore <= %@ AND dayBefore >= %@ AND ScheduleDescription.ScheduleStatus.yoshuu", argumentArray:[endDate, beginDate])
+            let Predicate:NSPredicate = NSPredicate(format: "dayBefore <= %@ AND dayBefore >= %@ AND statusStr == %@", argumentArray:[endDate, beginDate,status2])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes6 = {
             
             let realm = try! Realm()
-            let Predicate:NSPredicate = NSPredicate(format: "monthBefore <= %@ AND monthBefore >= %@ AND ScheduleDescription.ScheduleStatus.yoshuu", argumentArray:[endDate, beginDate])
+            let Predicate:NSPredicate = NSPredicate(format: "monthBefore <= %@ AND monthBefore >= %@ AND statusStr == %@", argumentArray:[endDate, beginDate,status2])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes7 = {
             
             let realm = try! Realm()
-            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeDayNext <= %@ AND monthBeforeDayNext >= %@ AND ScheduleDescription.ScheduleStatus.yoshuu", argumentArray:[endDate, beginDate])
+            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeDayNext <= %@ AND monthBeforeDayNext >= %@ AND statusStr == %@", argumentArray:[endDate, beginDate,status2])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes8 = {
             
             let realm = try! Realm()
-            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeWeekNext <= %@ AND monthBeforeWeekNext >= %@ AND ScheduleDescription.ScheduleStatus.yoshuu", argumentArray:[endDate, beginDate])
+            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeWeekNext <= %@ AND monthBeforeWeekNext >= %@ AND statusStr == %@", argumentArray:[endDate, beginDate,status2])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
@@ -182,15 +187,25 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         
         return cell!
     }
+ ////エラーーのところ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         selecttodo = scheduleFrom(indexPath: indexPath)
-        self.performSegue(withIdentifier: "directDetail", sender: todoes[indexPath.row])
+        
+        self.performSegue(withIdentifier: "directDetail", sender: nil)
         
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "directDetail" {
+            let controller = segue.destination as! ScheduleDetailViewController
+            controller.editTodoes = todoes[selectedIndexPath.row]
+        }
+    }
+    
     func scheduleFrom(indexPath : IndexPath) -> ScheduleDescription {
+        
         if indexPath.row < todoes.count {
             return todoes[indexPath.row]
             

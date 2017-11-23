@@ -42,15 +42,11 @@ class ScheduleDescription: Object {
             statusStr = newValue.rawValue
         }
     }
-
-    override static func primaryKey() -> String? {
-        return "id"
-    }
     
     static func lastId() -> Int {
         let realm = try! Realm()
         print(Realm.Configuration.defaultConfiguration.fileURL!)
-        if let scheduledescription = realm.objects(ScheduleDescription.self).sorted(byKeyPath: "id", ascending: false).first{
+        if let scheduledescription = realm.objects(ScheduleDescription.self).last {
             return scheduledescription.id + 1
             
         } else {
@@ -59,5 +55,11 @@ class ScheduleDescription: Object {
         
     }
 
+
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+    
+   
 }
 
