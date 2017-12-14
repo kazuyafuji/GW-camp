@@ -29,7 +29,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     
     var selecttodo : ScheduleDescription!
     
-    var selectedIndexPath = 
+    var selectedIndexPath = IndexPath()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +59,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
             
             let realm = try! Realm()
             let Predicate: NSPredicate = NSPredicate(format: "nextDay <= %@ AND nextDay >= %@ AND statusStr == %@" ,
-                argumentArray: [endDate, beginDate,status1]) 
+                                                     argumentArray: [endDate, beginDate,status1])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
@@ -67,42 +67,48 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         todoes3  = {
             
             let realm = try! Realm()
-            let Predicate: NSPredicate = NSPredicate(format: "nextWeek <= %@ AND nextWeek >= %@ AND statusStr == %@" ,                                                     argumentArray: [endDate, beginDate,status1])
+            let Predicate: NSPredicate = NSPredicate(format: "nextWeek <= %@ AND nextWeek >= %@ AND statusStr == %@" ,
+                                                     argumentArray: [endDate, beginDate,status1])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes4  = {
             
             let realm = try! Realm()
-            let Predicate: NSPredicate = NSPredicate(format: "nextMonth <= %@ AND nextMonth >= %@ AND statusStr == %@" ,                                                     argumentArray: [endDate, beginDate,status1])
+            let Predicate: NSPredicate = NSPredicate(format: "nextMonth <= %@ AND nextMonth >= %@ AND statusStr == %@" ,
+                                                     argumentArray: [endDate, beginDate,status1])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes5 = {
             
             let realm = try! Realm()
-            let Predicate:NSPredicate = NSPredicate(format: "dayBefore <= %@ AND dayBefore >= %@ AND statusStr == %@", argumentArray:[endDate, beginDate,status2])
+            let Predicate:NSPredicate = NSPredicate(format: "dayBefore <= %@ AND dayBefore >= %@ AND statusStr == %@",
+                                                    argumentArray:[endDate, beginDate,status2])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes6 = {
             
             let realm = try! Realm()
-            let Predicate:NSPredicate = NSPredicate(format: "monthBefore <= %@ AND monthBefore >= %@ AND statusStr == %@", argumentArray:[endDate, beginDate,status2])
+            let Predicate:NSPredicate = NSPredicate(format: "monthBefore <= %@ AND monthBefore >= %@ AND statusStr == %@",
+                                                    argumentArray:[endDate, beginDate,status2])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes7 = {
             
             let realm = try! Realm()
-            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeDayNext <= %@ AND monthBeforeDayNext >= %@ AND statusStr == %@", argumentArray:[endDate, beginDate,status2])
+            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeDayNext <= %@ AND monthBeforeDayNext >= %@ AND statusStr == %@",
+                                                    argumentArray:[endDate, beginDate,status2])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
         todoes8 = {
             
             let realm = try! Realm()
-            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeWeekNext <= %@ AND monthBeforeWeekNext >= %@ AND statusStr == %@", argumentArray:[endDate, beginDate,status2])
+            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeWeekNext <= %@ AND monthBeforeWeekNext >= %@ AND statusStr == %@",
+                                                    argumentArray:[endDate, beginDate,status2])
             return realm.objects(ScheduleDescription.self).filter(Predicate)
         }()
         
@@ -187,22 +193,18 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         
         return cell!
     }
- ////エラーーのところ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         selecttodo = scheduleFrom(indexPath: indexPath)
         
+        selectedIndexPath = indexPath
+        
         self.performSegue(withIdentifier: "directDetail", sender: nil)
         
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "directDetail" {
-            let controller = segue.destination as! ScheduleDetailViewController
-            controller.editTodoes = todoes[selectedIndexPath.row]
-        }
-    }
     
     func scheduleFrom(indexPath : IndexPath) -> ScheduleDescription {
         
@@ -232,6 +234,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         
     }
     
+   
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toSelect" {
@@ -241,11 +244,14 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
             
             
         } else if segue.identifier == "directDetail" {
-            let controllerduedate = segue.destination as! ScheduleDetailViewController
+            let controller = segue.destination as! ScheduleDetailViewController
             
             let scheduledescription = ScheduleDescription()
             
-            controllerduedate.scheduledescription = scheduledescription
+            controller.scheduledescription = scheduledescription
+            controller.editTodoes = scheduleFrom(indexPath: selectedIndexPath)
+            controller.scheduleStatus = ScheduleDescription.ScheduleStatus.edit
+
             
         }
     }

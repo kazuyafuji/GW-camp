@@ -16,7 +16,6 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
     //編集用のデータの受け渡し先
     var editTodoes : ScheduleDescription!
     
-   
     
     @IBOutlet var deleteButton: UIButton!
     @IBOutlet var scheduleTextField: UITextField!
@@ -33,10 +32,10 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
         // Do any additional setup after loading the view.
         scheduleTextField.delegate = self
         memoTextField.delegate = self
-        if let scheduledescription = self.scheduledescription {
-            scheduleTextField.text = scheduledescription.schedule
-            memoTextField.text = scheduledescription.memo
-            /*dueDatePicker.date = scheduledescription.dueDate as Date*/
+        
+        if let editscheduledescription = self.editTodoes {
+            scheduleTextField.text = editscheduledescription.schedule
+            memoTextField.text = editscheduledescription.memo
         }
         
         if scheduledescription == nil {
@@ -124,8 +123,18 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                     realm.add(scheduledescription, update: true)
                     
                 }
-                
-            }
+          //編集が適用されない！
+            }/* else if scheduleStatus == ScheduleDescription.ScheduleStatus.edit {
+                let realm = try! Realm()
+                try! realm.write {
+                    scheduledescription.schedule = title
+                    scheduledescription.memo = detailDescription
+                    scheduledescription.status = .edit
+                    scheduledescription.status = scheduleStatus
+                    
+                    realm.add(scheduledescription, update: true)
+                }
+            }*/
         }
         
         
@@ -160,15 +169,48 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
     
     
     @IBAction func delete() {
-        if let scheduledescription = scheduledescription {
-            let realm = try! Realm()
-            try! realm.write {
-                realm.delete(scheduledescription)
+        let alert: UIAlertController = UIAlertController(title: "確認", message: "この予定を削除してもよろしいですか？", preferredStyle: .alert)
+        alert.addAction(
+            UIAlertAction(
+                title: "削除する",
+                style: UIAlertActionStyle.default,
+                handler: {action in
+                    self.move()
+                    self.Delete()
+                    
             }
-        }
+            )
+        )
+        alert.addAction(
+            UIAlertAction(
+                title: "キャンセル",
+                style: UIAlertActionStyle.cancel,
+                handler: {action in
+                    
+                    
+            }
+            )
+        )
+        self.present(alert, animated: true, completion: nil)
+        
         
     }
+    
+    func Delete() {
+        let realm = try! Realm()
         
+        
+            try! realm.write() {
+                realm.delete(editTodoes)
+            }
+            scheduleTextField.text = ""
+            memoTextField.text = ""
+
+        
+        }
+    
+    
+    
     
     
     

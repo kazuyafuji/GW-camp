@@ -30,6 +30,7 @@ class ScheduleDescription: Object {
     enum ScheduleStatus : String {
         case hukushuu = "hukushuu"
         case yoshuu = "yoshuu"
+        case edit = "edit"
     }
 
     
