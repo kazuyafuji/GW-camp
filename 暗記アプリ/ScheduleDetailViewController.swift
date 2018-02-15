@@ -16,7 +16,6 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
     //編集用のデータの受け渡し先
     var editTodoes : ScheduleDescription!
     
-    
     @IBOutlet var deleteButton: UIButton!
     @IBOutlet var scheduleTextField: UITextField!
     @IBOutlet var memoTextField: UITextField!
@@ -38,7 +37,7 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
             memoTextField.text = editscheduledescription.memo
         }
         
-        if scheduledescription == nil {
+        if editTodoes == nil {
             deleteButton.isHidden = true
             scheduledescription = ScheduleDescription()
         }
@@ -56,7 +55,7 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
     
     @IBAction func save() {
         
-        if let title = scheduleTextField.text, let detailDescription = memoTextField.text {
+        if var title = scheduleTextField.text, let detailDescription = memoTextField.text {
             
             if scheduleStatus == ScheduleDescription.ScheduleStatus.hukushuu {
                 
@@ -123,18 +122,22 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
                     realm.add(scheduledescription, update: true)
                     
                 }
-          //編集が適用されない！
-            }/* else if scheduleStatus == ScheduleDescription.ScheduleStatus.edit {
+          
+            } else if scheduleStatus == ScheduleDescription.ScheduleStatus.edit {
+                print (scheduleStatus)
                 let realm = try! Realm()
+                
+                
                 try! realm.write {
-                    scheduledescription.schedule = title
-                    scheduledescription.memo = detailDescription
-                    scheduledescription.status = .edit
-                    scheduledescription.status = scheduleStatus
+                    let editscheduledescription = self.editTodoes
+                    print(detailDescription)
+                    print(title)
+                    editscheduledescription!.schedule = title
+                    editscheduledescription!.memo = detailDescription
                     
-                    realm.add(scheduledescription, update: true)
+                    
                 }
-            }*/
+            }
         }
         
         
@@ -166,8 +169,7 @@ class ScheduleDetailViewController: UIViewController , UITextFieldDelegate {
         self.navigationController?.popToViewController(navigationController!.viewControllers[1], animated: true)
     }
     
-    
-    
+       
     @IBAction func delete() {
         let alert: UIAlertController = UIAlertController(title: "確認", message: "この予定を削除してもよろしいですか？", preferredStyle: .alert)
         alert.addAction(

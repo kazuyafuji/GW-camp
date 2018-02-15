@@ -31,22 +31,24 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     
     var selectedIndexPath = IndexPath()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        //このviewcontrollerからTableViewCellを使えるようにする
+        tableView.register(UINib(nibName: "listTableViewCell",bundle: nil), forCellReuseIdentifier: "cell")
+        
         print(beginDate)
         print(endDate)
         
-        self.loadtodes()
-        
-        
+        self.loadtodoes()
         
         tableView.delegate = self
         tableView.dataSource = self
     }
     
-    func loadtodes() {
+    func loadtodoes() {
         todoes  = {
             
             let realm = try! Realm()
@@ -124,7 +126,7 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.loadtodes()
+        self.loadtodoes()
         tableView.reloadData()
         
         self.navigationItem.title = changeNavigationBarTitle(date: beginDate as Date)
@@ -172,26 +174,38 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! listTableViewCell
+        
         let scheduledescription = scheduleFrom(indexPath: indexPath)
         
+        let hukushuutext = numberText1(indexPath: indexPath)
+        let yoshuutext = numberText2(indexPath: indexPath)
+        
+        cell.kaisuuLabel.textColor = UIColor.lightGray
         
         if indexPath.section == 0 {
             //予定のとき
-            cell?.textLabel?.text = scheduledescription.schedule
+            cell.yoteiLabel?.text = scheduledescription.schedule
+            if scheduledescription.status == ScheduleDescription.ScheduleStatus.yoshuu {
+                cell.kaisuuLabel.text = yoshuutext
+            } else if scheduledescription.status == ScheduleDescription.ScheduleStatus.hukushuu {
+                cell.kaisuuLabel.text = hukushuutext
+            }
         } else if indexPath.section == 1 {
             //やることのとき
-            cell?.textLabel?.text = scheduledescription.memo
+            cell.yoteiLabel?.text = scheduledescription.memo
+            cell.kaisuuLabel.text = nil
         }
         
         
         if scheduledescription.status == ScheduleDescription.ScheduleStatus.yoshuu {
-            cell?.textLabel?.textColor = UIColor.blue
+            cell.yoteiLabel?.textColor = UIColor.blue
         } else if scheduledescription.status == ScheduleDescription.ScheduleStatus.hukushuu {
-            cell?.textLabel?.textColor = UIColor.red
+            cell.yoteiLabel?.textColor = UIColor.red
+            
         }
         
-        return cell!
+        return cell
     }
     
     
@@ -234,7 +248,50 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         
     }
     
-   
+    func numberText1(indexPath : IndexPath) -> String {
+        //schduleFromのようにそれぞれで場合分けして、何回目なのかを表示する　　あとはほとんど同じようにやる
+        if indexPath.row < todoes.count {
+            return "1回目"
+        } else if indexPath.row < todoes.count + todoes2.count {
+            return "2回目"
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count {
+            return "3回目"
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count {
+            return "4回目"
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count {
+            return ""
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count + todoes6.count {
+            return ""
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count + todoes6.count + todoes7.count {
+            return ""
+        } else  {
+            return ""
+        }
+        
+        
+    }
+    
+    func numberText2(indexPath : IndexPath) -> String {
+        //schduleFromのようにそれぞれで場合分けして、何回目なのかを表示する　　あとはほとんど同じようにやる
+        if indexPath.row < todoes.count {
+            return "5回目"
+        } else if indexPath.row < todoes.count + todoes2.count {
+            return ""
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count {
+            return ""
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count {
+            return ""
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count {
+            return "4回目"
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count + todoes6.count {
+            return "1回目"
+        } else if indexPath.row < todoes.count + todoes2.count + todoes3.count + todoes4.count + todoes5.count + todoes6.count + todoes7.count {
+            return "2回目"
+        } else  {
+            return "3回目"
+        }
+    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toSelect" {
@@ -246,13 +303,8 @@ class CalendarScheduleViewController: UIViewController, UITableViewDataSource, U
         } else if segue.identifier == "directDetail" {
             let controller = segue.destination as! ScheduleDetailViewController
             
-            let scheduledescription = ScheduleDescription()
-            
-            controller.scheduledescription = scheduledescription
             controller.editTodoes = scheduleFrom(indexPath: selectedIndexPath)
             controller.scheduleStatus = ScheduleDescription.ScheduleStatus.edit
-
-            
         }
     }
 }

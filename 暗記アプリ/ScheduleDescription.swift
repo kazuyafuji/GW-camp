@@ -31,7 +31,7 @@ class ScheduleDescription: Object {
         case hukushuu = "hukushuu"
         case yoshuu = "yoshuu"
         case edit = "edit"
-    }
+        }
 
     
     /// typeをEnumで扱うためのプロパティ

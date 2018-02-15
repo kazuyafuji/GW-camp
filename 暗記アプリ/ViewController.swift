@@ -17,6 +17,14 @@ extension UIColor {
     class func lightRed() -> UIColor {
         return UIColor(red: 195.0 / 255, green: 123.0 / 255, blue: 175.0 / 255, alpha: 1.0)
     }
+    
+    class func lightGreenBlue() -> UIColor {
+        return UIColor(red: 80.0 / 255, green: 190.0 / 255, blue: 192.0 / 255, alpha: 1.0)
+    }
+    
+    class func lightlightGray() -> UIColor {
+        return UIColor(red: 170.0 / 255, green: 170.0 / 255, blue: 170.0 / 255, alpha: 0.76)
+    }
 }
 
 
@@ -27,10 +35,26 @@ class ViewController: UIViewController, UICollectionViewDelegate {
     let cellMargin: CGFloat = 2.0
     var selectedDate = NSDate()
     var today: NSDate!
-    let weekArray = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+    let weekArray = ["日", "月", "火", "水", "木", "金", "土"]
     let calendar = NSCalendar.current
     
     var cellTapped :Bool = false
+    
+    var todoes: Results<ScheduleDescription>!
+    var todoes2 : Results<ScheduleDescription>!
+    var todoes3 : Results<ScheduleDescription>!
+    var todoes4 : Results<ScheduleDescription>!
+    var todoes5 : Results<ScheduleDescription>!
+    var todoes6 : Results<ScheduleDescription>!
+    var todoes7 : Results<ScheduleDescription>!
+    var todoes8 : Results<ScheduleDescription>!
+    
+    var selecttodo : ScheduleDescription!
+    
+    var selectedIndexPath = IndexPath()
+    
+    var status1:String = ScheduleDescription.ScheduleStatus.hukushuu.rawValue
+    var status2:String = ScheduleDescription.ScheduleStatus.yoshuu.rawValue
     
     
     @IBOutlet var headerPrevBtn: UIBarButtonItem!
@@ -48,6 +72,8 @@ class ViewController: UIViewController, UICollectionViewDelegate {
         calendarCollectionView.backgroundColor = UIColor.white
         
         headerTitle.title = changeHeaderTitle(date: selectedDate) //追記
+        self.loadtodoes()
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -59,7 +85,6 @@ class ViewController: UIViewController, UICollectionViewDelegate {
             headerPrevBtn.setTitleTextAttributes([NSFontAttributeName:font], for: .normal)
         }
     }
-    
     
     
     
@@ -108,6 +133,7 @@ extension ViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath as IndexPath) as! CalendarCell
         
+        
         //テキストカラー
         if (indexPath.row % 7 == 0) {
             cell.textLabel.textColor = UIColor.lightRed()
@@ -119,10 +145,45 @@ extension ViewController: UICollectionViewDataSource {
         //テキスト配置
         if indexPath.section == 0 {
             cell.textLabel.text = weekArray[indexPath.row]
+            
         } else {
             cell.textLabel.text = dateManager.conversionDateFormat(indexPath: indexPath as NSIndexPath)
             //月によって1日の場所は異なる(後ほど説明します)
+            
+            //枠線 （いらないかも
+            cell.frameLabel.layer.borderColor = UIColor.lightlightGray().cgColor
+            cell.frameLabel.layer.borderWidth = 1
+            cell.frameLabel.layer.cornerRadius = 8
+            
+            
+            if todoes  == nil {
+                cell.markLabel.isHidden = true
+            } else if todoes2 == nil {
+                cell.markLabel.isHidden = true
+            } else if todoes3 == nil {
+                cell.markLabel.isHidden = true
+            } else if todoes4 == nil {
+                cell.markLabel.isHidden = true
+            } else if todoes5 == nil {
+                cell.markLabel.isHidden = true
+            } else if todoes6 == nil {
+                cell.markLabel.isHidden = true
+            } else if todoes7 == nil {
+                cell.markLabel.isHidden = true
+            } else if todoes8 == nil {
+                cell.markLabel.isHidden = true
+            } else {
+             //丸
+            cell.markLabel.layer.borderColor = UIColor.lightGreenBlue().cgColor
+            cell.markLabel.layer.borderWidth = 1
+            cell.markLabel.layer.cornerRadius = 5
+            cell.markLabel.layer.backgroundColor = UIColor.lightGreenBlue().cgColor
+            }
+            
         }
+        
+        
+        
         
         return cell
     }
@@ -202,10 +263,6 @@ extension ViewController: UICollectionViewDataSource {
         return dateFormatter.date(from: dateString)! as NSDate
     }
     
-    
-    
-    
-    
 }
 
 
@@ -228,6 +285,77 @@ extension ViewController: UICollectionViewDelegateFlowLayout {
     //セルの水平方向のマージンを設定
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return cellMargin
+    }
+    
+    //日付に予定が入ってるかどうかを知る
+    func loadtodoes() {
+        todoes  = {
+            
+            let realm = try! Realm()
+            let Predicate: NSPredicate = NSPredicate(format: "dueDate <= %@ AND dueDate >= %@" ,                                                     argumentArray: [endOfDay, beginningOfDay])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        //日付Aをタップした時に　nextDayが日付Aになっているデータをこの中に入れる。
+        todoes2  = {
+            
+            let realm = try! Realm()
+            let Predicate: NSPredicate = NSPredicate(format: "nextDay <= %@ AND nextDay >= %@ AND statusStr == %@" ,
+                                                     argumentArray: [endOfDay,beginningOfDay,status1])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        //日付aをタップした時に　nextWeekが日付aになっているデータをこの中に入れる
+        todoes3  = {
+            
+            let realm = try! Realm()
+            let Predicate: NSPredicate = NSPredicate(format: "nextWeek <= %@ AND nextWeek >= %@ AND statusStr == %@" ,
+                                                     argumentArray: [endOfDay, beginningOfDay,status1])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes4  = {
+            
+            let realm = try! Realm()
+            let Predicate: NSPredicate = NSPredicate(format: "nextMonth <= %@ AND nextMonth >= %@ AND statusStr == %@" ,
+                                                     argumentArray: [endOfDay,beginningOfDay,status1])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes5 = {
+            
+            let realm = try! Realm()
+            let Predicate:NSPredicate = NSPredicate(format: "dayBefore <= %@ AND dayBefore >= %@ AND statusStr == %@",
+                                                    argumentArray:[endOfDay, beginningOfDay,status2])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes6 = {
+            
+            let realm = try! Realm()
+            let Predicate:NSPredicate = NSPredicate(format: "monthBefore <= %@ AND monthBefore >= %@ AND statusStr == %@",
+                                                    argumentArray:[endOfDay, beginningOfDay,status2])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes7 = {
+            
+            let realm = try! Realm()
+            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeDayNext <= %@ AND monthBeforeDayNext >= %@ AND statusStr == %@",
+                                                    argumentArray:[endOfDay, beginningOfDay,status2])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        todoes8 = {
+            
+            let realm = try! Realm()
+            let Predicate:NSPredicate = NSPredicate(format: "monthBeforeWeekNext <= %@ AND monthBeforeWeekNext >= %@ AND statusStr == %@",
+                                                    argumentArray:[endOfDay, beginningOfDay,status2])
+            return realm.objects(ScheduleDescription.self).filter(Predicate)
+        }()
+        
+        
+        
     }
     
     
